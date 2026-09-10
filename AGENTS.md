@@ -54,7 +54,7 @@ Distributed AI inference cluster using llama.cpp RPC mode across heterogeneous n
 
 ## File Structure
 
-### `/home/ficus-pro/Documents/ai-cluster-auto-connect/` — Project root
+### `~/ai-cluster/` — Project root
 
 | Path | Role |
 |------|------|
@@ -78,7 +78,7 @@ Distributed AI inference cluster using llama.cpp RPC mode across heterogeneous n
 | `IMPLEMENTATION-PLAN.md` | Roadmap and status |
 | `CHANGELOG.md` | Release history |
 
-### `/home/ficus-pro/Documents/ai-cluster-auto-connect/src/` — Source
+### `~/ai-cluster/src/` — Source
 
 | Path | Role |
 |------|------|
@@ -93,7 +93,7 @@ Distributed AI inference cluster using llama.cpp RPC mode across heterogeneous n
 | `src/gui/system_tray.py` | System tray icon and menu |
 | `src/gui/resources.py` | Bundled icon resources |
 
-### `/home/ficus-pro/Documents/ai-cluster-auto-connect/linux/` — Linux desktop/systemd integration
+### `~/ai-cluster/linux/` — Linux desktop/systemd integration
 
 | Path | Role |
 |------|------|
@@ -106,7 +106,7 @@ Distributed AI inference cluster using llama.cpp RPC mode across heterogeneous n
 | `launch-cluster.sh` | Helper script to start root + worker locally |
 | `connect.sh` | SSH connection helper |
 
-### `/home/ficus-pro/Documents/ai-cluster-auto-connect/legacy/` — First-generation bash implementation
+### `~/ai-cluster/legacy/` — First-generation bash implementation
 
 | Path | Role |
 |------|------|
@@ -122,19 +122,19 @@ Distributed AI inference cluster using llama.cpp RPC mode across heterogeneous n
 | `bin/` | Pre-built `llama-server` and `rpc-server` binaries, plus `.gguf` models |
 | `models/` | Bundled GGUF models (TinyLlama, Qwen2.5) |
 
-### `/home/ficus-pro/Documents/ai-cluster-auto-connect/dashboard/` — Web dashboard
+### `~/ai-cluster/dashboard/` — Web dashboard
 
 | Path | Role |
 |------|------|
 | `dashboard/build/index.html` | Static dashboard that polls `/api/status` every 3 seconds |
 
-### `/home/ficus-pro/Documents/ai-cluster-auto-connect/deploy/` — Remote deployment
+### `~/ai-cluster/deploy/` — Remote deployment
 
 | Path | Role |
 |------|------|
 | `deploy-worker.sh` | Push pre-built PyInstaller worker binary to a remote Linux host over SSH and start it |
 
-### `/home/ficus-pro/Documents/ai-cluster-auto-connect/tests/` — Unit tests
+### `~/ai-cluster/tests/` — Unit tests
 
 | Path | Role |
 |------|------|
@@ -161,7 +161,7 @@ Distributed AI inference cluster using llama.cpp RPC mode across heterogeneous n
 When updating docs, never edit `.py`, `.sh`, `.service`, `.desktop`, `.yaml`, `.spec`, or binary files. Docs must describe the code as-is.
 
 ### 2. One Source of Truth for Launcher Paths
-The live Desktop file is `/home/ficus-pro/Desktop/ai-cluster.desktop`. It runs `/home/ficus-pro/Documents/ai-cluster-auto-connect/ai-cluster-desktop-root.sh`. The version-controlled templates live in `linux/`. Installers copy templates into `~/.local/share/applications/` and onto the Desktop.
+The live Desktop file is `~/Desktop/ai-cluster.desktop`. It runs `~/ai-cluster/ai-cluster-desktop-root.sh`. The version-controlled templates live in `linux/`. Installers copy templates into `~/.local/share/applications/` and onto the Desktop.
 
 ### 3. Root vs. Legacy
 Current control plane is Generation 2 (Python in `src/`). Legacy bash scripts in `legacy/` still exist for reference, Android/iPhone build helpers, and USB tethering setup, but the main orchestrator is `cluster.py`.
@@ -213,7 +213,7 @@ python3 cluster.py clean
 
 | Target | Command |
 |--------|---------|
-| Desktop launcher | `/home/ficus-pro/Desktop/ai-cluster.desktop` → `ai-cluster-desktop-root.sh` |
+| Desktop launcher | `~/Desktop/ai-cluster.desktop` → `ai-cluster-desktop-root.sh` |
 | Root service | `systemctl --user start ai-cluster-root.service` |
 | Worker service | `systemctl --user start ai-cluster-worker.service` |
 | GUI service | `systemctl --user start ai-cluster-gui.service` |

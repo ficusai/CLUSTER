@@ -333,7 +333,7 @@ onboard_android_usb() {
     ANDROID_IP=$(get_ip_from_adb_shell)
 
     if [ -z "$ANDROID_IP" ]; then
-        ANDROID_IP="192.168.42.129"
+        ANDROID_IP="${ANDROID_IP:-"192.168.42.129"}"
     fi
 
     info "Attempting SSH at ${ANDROID_IP}..."

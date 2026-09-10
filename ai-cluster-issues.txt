@@ -7,7 +7,7 @@ CRITICAL (functionality broken)
 --------------------------------
 1. WEB DASHBOARD MISSING
    root/main.py:590 resolves dashboard/build to:
-     /home/ficus-pro/Documents/ai-cluster-auto-connect/dashboard/build
+     ~/ai-cluster/dashboard/build
    That directory does not exist.
    Effect: xdg-open http://localhost:8080 shows empty directory listing,
    not the intended dashboard.
@@ -21,7 +21,7 @@ CRITICAL (functionality broken)
 
 3. CROSS-PROJECT DEPENDENCY (violates AGENTS.md)
    launcher-notify.sh calls:
-     /home/ficus-pro/Documents/notify-action.py
+     ~/Documents/notify-action.py
    That file sits outside the ai-cluster-auto-connect project folder.
    Effect: moving/renaming the project or cleaning Documents/ breaks the
    launcher silently.
@@ -108,5 +108,5 @@ P2: stop auto_start_rpc loop, fix async pid, add HTTP API token auth,
     catch zeroconf conflicts with unique instance names.
 
 Logs referenced:
-  /home/ficus-pro/Documents/ai-cluster-auto-connect/.run.log
-  /home/ficus-pro/Documents/ai-cluster-auto-connect/logs/old logs/2026-06-28-01-19-43.log
+  ~/ai-cluster/.run.log
+  ~/ai-cluster/logs/old logs/2026-06-28-01-19-43.log

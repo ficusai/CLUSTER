@@ -29,8 +29,7 @@ logs/
 .env.local
 *.pem
 *.key
-android_ssh_key
-android_ssh_key.pub
+android_ssh_key*
 *.p12
 *.pfx
 

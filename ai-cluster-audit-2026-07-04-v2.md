@@ -1,6 +1,6 @@
 # AI Cluster Auto-Connect — Deep Audit — 2026-07-04 (Session 2)
 
-Project: `/home/ficus-pro/Documents/ai-cluster-auto-connect`
+Project: `~/ai-cluster`
 Entry: `cluster.py`, `launcher.sh`, `launcher-notify.sh`, `ai-cluster.desktop`
 Config: `config.yaml`
 Docs: AGENTS.md, BLUEPRINT.md, README.md, ARCHITECTURE.md, INSTALLATION.md, OPS.md, IMPLEMENTATION-PLAN.md, CHANGELOG.md
@@ -90,7 +90,7 @@ No single view shows all events. `cluster-dashboard.py` reads `logs/launcher.log
 - Created as a placeholder but contains nothing. Unnecessary.
 
 ### 17. PyInstaller spec hardcodes absolute home path
-- `cluster-linux-x86_64.spec:5` — `['/home/ficus-pro/Documents/ai-cluster-auto-connect/cluster.py']`
+- `cluster-linux-x86_64.spec:5` — `['/path/to/ai-cluster/cluster.py']`
 - Machine-specific. Won't work on any other system.
 
 ### 18. Default config paths hardcoded to user's Desktop/Documents

@@ -9,6 +9,9 @@ source "${SCRIPT_DIR}/cluster-config.env"
 SSH_KEY="${SCRIPT_DIR}/android_ssh_key"
 WORKER_SCRIPT="~/ai-cluster/start-worker.sh"
 
+ANDROID_USER="${ANDROID_USER:-u0_a377}"
+ANDROID_IP="${ANDROID_IP:-192.168.1.100}"
+
 echo "============================================"
 echo "  Android Worker — Persistent Connection"
 echo "  Auto-reconnects on disconnect"
@@ -19,7 +22,7 @@ echo "============================================"
 ssh -i "$SSH_KEY" \
     -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
-    -p 8022 u0_a377@10.0.0.108 \
+    -p 8022 "${ANDROID_USER}@${ANDROID_IP}" \
     "mkdir -p ~/ai-cluster && echo 'ROOT_IP=${ROOT_IP}' > ~/ai-cluster/android-config.env && echo 'RPC_PORT=50052' >> ~/ai-cluster/android-config.env"
 
 # Keep reconnecting
@@ -31,7 +34,7 @@ while true; do
         -o ServerAliveInterval=15 \
         -o ServerAliveCountMax=3 \
         -o TCPKeepAlive=yes \
-        -p 8022 u0_a377@10.0.0.108 \
+        -p 8022 "${ANDROID_USER}@${ANDROID_IP}" \
         "ROOT_IP=${ROOT_IP} ${WORKER_SCRIPT}" || true
     echo "[$(date '+%H:%M:%S')] Disconnected. Reconnecting in 5s..."
     sleep 5

@@ -1,4 +1,6 @@
+import os
 import socket
+import tempfile
 import threading
 import time
 
@@ -33,12 +35,15 @@ def test_root_llama_port_fallback():
     time.sleep(0.1)
 
     mock_proc = MagicMock()
+    mock_proc.pid = 999999
     mock_proc.poll.return_value = None
 
+    fake_model = os.path.join(tempfile.gettempdir(), "fake_model.gguf")
+
     root = ClusterRoot(ctrl_port=CTRL_PORT_DEFAULT + 9999, ai_mode=False)
-    root.model_path = "/tmp/fake_model.gguf"
+    root.model_path = fake_model
     try:
-        with patch("subprocess.Popen", return_value=mock_proc), patch("time.sleep", return_value=None):
+        with patch("subprocess.Popen", return_value=mock_proc), patch("root.main.time.sleep", return_value=None):
             root.start_llama_server()
             # Should have fallen back away from 8081
             assert root.llama_http_port != 8081

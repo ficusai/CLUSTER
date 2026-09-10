@@ -81,7 +81,7 @@ onboard_android() {
 
     info "Android ${ip}: starting worker..."
     local ROOT_IP
-    ROOT_IP="$(hostname -I 2>/dev/null | awk '{print $1}' || echo '10.0.0.103')"
+    ROOT_IP="$(hostname -I 2>/dev/null | awk '{print $1}' || echo '192.168.1.100')"
     start_worker_remote "${SSH_BASE}" "${ROOT_IP}"
 
     sleep 2
@@ -123,7 +123,7 @@ onboard_linux() {
 
     info "Linux ${ip}: starting worker..."
     local ROOT_IP
-    ROOT_IP="$(hostname -I 2>/dev/null | awk '{print $1}' || echo '10.0.0.103')"
+    ROOT_IP="$(hostname -I 2>/dev/null | awk '{print $1}' || echo '192.168.1.100')"
     start_worker_remote "${SSH_BASE}" "${ROOT_IP}"
 
     sleep 2

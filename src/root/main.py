@@ -412,7 +412,7 @@ class ClusterRoot:
 
     @LogHub.log_call("ROOT")
     def _kill_process_tree(self, proc):
-        if proc is None:
+        if proc is None or not hasattr(proc, "pid") or not isinstance(proc.pid, int) or proc.pid <= 0:
             return
         try:
             if proc.poll() is None:

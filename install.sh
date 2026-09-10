@@ -4,12 +4,14 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PREFIX="${PREFIX:-/usr/local}"
+BIN_DIR="${BIN_DIR:-${PREFIX}/bin}"
 BIN_NAME="ai-cluster"
-BIN_PATH="/usr/local/bin/${BIN_NAME}"
-ICON_DIR="/usr/share/icons/hicolor/scalable/apps"
+BIN_PATH="${BIN_DIR}/${BIN_NAME}"
+ICON_DIR="${ICON_DIR:-${PREFIX}/share/icons/hicolor/scalable/apps}"
 ICON_PATH="${ICON_DIR}/ai-cluster.svg"
-DESKTOP_DIR="/usr/share/applications"
-SERVICE_DIR="/etc/systemd/system"
+DESKTOP_DIR="${DESKTOP_DIR:-${PREFIX}/share/applications}"
+SERVICE_DIR="${SERVICE_DIR:-/etc/systemd/system}"
 
 echo "=== AI Cluster Auto-Connect Installer ==="
 echo ""
@@ -84,7 +86,7 @@ cat > "$ICON_PATH" << 'SVG'
   <circle cx="48" cy="44" r="3.5" fill="#50E3C2"/>
 </svg>
 SVG
-gtk-update-icon-cache /usr/share/icons/hicolor/ 2>/dev/null || true
+gtk-update-icon-cache "${PREFIX}/share/icons/hicolor/" 2>/dev/null || true
 echo "  Done."
 
 # Install desktop entries

@@ -3,22 +3,21 @@ Type=Application
 Name=AI Cluster (Root)
 GenericName=AI Cluster Root Coordinator
 Comment=Start the AI cluster root coordinator and open the dashboard
-Exec=gnome-terminal -- /home/ficus-pro/Documents/ai-cluster-auto-connect/ai-cluster-desktop-root.sh
-Icon=/home/ficus-pro/Documents/ai-cluster-auto-connect/assets/ai-cluster.svg
-Path=/home/ficus-pro/Documents/ai-cluster-auto-connect
+Exec=sh -c '"$HOME/ai-cluster/ai-cluster-desktop-root.sh"'
+Icon=ai-cluster
 Terminal=false
 StartupNotify=true
 Categories=System;Monitor;
 Keywords=cluster;ai;root;inference;dashboard;
-TryExec=/home/ficus-pro/Documents/ai-cluster-auto-connect/ai-cluster-desktop-root.sh
+TryExec=ai-cluster
 Actions=Stop;Logs;
 
 [Desktop Action Stop]
 Name=Stop Cluster
-Exec=/home/ficus-pro/Documents/ai-cluster-auto-connect/ai-cluster-stop.sh
-Icon=/home/ficus-pro/Documents/ai-cluster-auto-connect/assets/ai-cluster.svg
+Exec=sh -c '"$HOME/ai-cluster/ai-cluster-stop.sh"'
+Icon=ai-cluster
 
 [Desktop Action Logs]
 Name=View Logs
-Exec=/home/ficus-pro/Documents/ai-cluster-auto-connect/ai-cluster-logs.sh
-Icon=/home/ficus-pro/Documents/ai-cluster-auto-connect/assets/ai-cluster.svg
+Exec=sh -c '"$HOME/ai-cluster/ai-cluster-logs.sh"'
+Icon=ai-cluster

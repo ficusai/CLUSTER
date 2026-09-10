@@ -2,7 +2,7 @@
 Type=Application
 Name=Android Phone SSH
 Comment=Connect to Android phone (Termux) via SSH with status notification
-Exec=/home/ficus-pro/Desktop/BARDAKAS/APPS/launchers/android-phone-ssh.sh
+Exec=sh -c '"$HOME/Desktop/BARDAKAS/APPS/launchers/android-phone-ssh.sh"'
 Icon=utilities-terminal
 Terminal=true
 Categories=Network;Development;

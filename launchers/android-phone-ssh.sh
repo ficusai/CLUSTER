@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-HOST="10.0.0.190"
+HOST="${1:-"${HOST:-"192.168.1.100"}"}"
 PORT=8022
 USER="u0_a377"
 

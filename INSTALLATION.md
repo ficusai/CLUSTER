@@ -65,13 +65,13 @@ journalctl --user -u ai-cluster-root.service -f
 The live Desktop file is:
 
 ```
-/home/ficus-pro/Desktop/ai-cluster.desktop
+~/Desktop/ai-cluster.desktop
 ```
 
 It executes:
 
 ```
-/home/ficus-pro/Documents/ai-cluster-auto-connect/launcher-notify.sh --root
+~/ai-cluster/launcher-notify.sh --root
 ```
 
 This starts the root node and shows a notification with **Stop / Restart / Logs** action buttons.

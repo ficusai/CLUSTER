@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_FILE="${SCRIPT_DIR}/cluster-config.env"
 [ -f "${CONFIG_FILE}" ] && source "${CONFIG_FILE}"
 
-IPHONE_IP="${WORKER2_IP:-10.0.0.136}"
+IPHONE_IP="${WORKER2_IP:-192.168.1.100}"
 KEY="${SCRIPT_DIR}/android_ssh_key"
 SSH_PORT=2222
 IPROXY_PID=""

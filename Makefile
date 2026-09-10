@@ -1,5 +1,7 @@
 .PHONY: help install uninstall build run clean
 
+PREFIX ?= /usr/local
+BINDIR ?= $(PREFIX)/bin
 BINARY_NAME=ai-cluster
 PLATFORM:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH:=$(shell uname -m)
@@ -24,9 +26,9 @@ install:
 
 uninstall:
 	@echo "=== Uninstalling AI Cluster ==="
-	@sudo rm -f /usr/local/bin/$(BINARY_NAME) || true
-	@sudo rm -f /usr/share/icons/hicolor/scalable/apps/ai-cluster.svg || true
-	@sudo rm -f /usr/share/applications/ai-cluster*.desktop || true
+	@sudo rm -f $(BINDIR)/$(BINARY_NAME) || true
+	@sudo rm -f $(PREFIX)/share/icons/hicolor/scalable/apps/ai-cluster.svg || true
+	@sudo rm -f $(PREFIX)/share/applications/ai-cluster*.desktop || true
 	@sudo rm -f /etc/systemd/system/ai-cluster*.service || true
 	@sudo systemctl daemon-reload 2>/dev/null || true
 	@echo "Uninstalled."

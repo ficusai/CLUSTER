@@ -2,7 +2,7 @@
 # Download files/folders from Android phone (Termux) to the PC.
 # Uses scp -r (secure copy) over the existing SSH key auth.
 
-PHONE_HOST="10.0.0.190"
+PHONE_HOST="${PHONE_HOST:-"${1:-"192.168.1.100"}"}"
 PHONE_PORT=8022
 PHONE_USER="u0_a377"
 

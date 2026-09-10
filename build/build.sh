@@ -21,10 +21,13 @@ echo ""
 DATA_SEP=":"
 [[ "$PLATFORM" == "mingw"* || "$PLATFORM" == "cygwin"* || "$PLATFORM" == "windows"* ]] && DATA_SEP=";"
 
+WORK_DIR="$(mktemp -d -t pyibuild-cluster-XXXXXX)"
+trap 'rm -rf "$WORK_DIR"' EXIT
+
 pyinstaller --onefile \
     --name "cluster-${PLATFORM}-${ARCH}" \
     --distpath "$DIST_DIR" \
-    --workpath "/tmp/pyibuild-cluster" \
+    --workpath "$WORK_DIR" \
     --add-data "${SRC_DIR}/common${DATA_SEP}common" \
     --add-data "${SRC_DIR}/root${DATA_SEP}root" \
     --add-data "${SRC_DIR}/worker${DATA_SEP}worker" \

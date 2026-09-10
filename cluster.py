@@ -340,7 +340,7 @@ def main():
   %(prog)s --worker           Run as helper/worker (auto-discover root)
   %(prog)s --root --gui       Run as root with desktop GUI
   %(prog)s --worker --gui     Run as worker with desktop GUI
-  %(prog)s --worker --root-ip 10.0.0.103  Connect to specific root
+  %(prog)s --worker --root-ip 192.168.1.100  Connect to specific root
         """,
     )
     parser.add_argument("--root", action="store_true", help="Run as root device")

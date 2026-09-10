@@ -1,11 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 
+base_dir = os.path.abspath('.')
 
 a = Analysis(
-    ['/home/ficus-pro/Desktop/ai-cluster-auto-connect/src/root/main.py'],
+    [os.path.join(base_dir, 'src/root/main.py')],
     pathex=[],
     binaries=[],
-    datas=[('/home/ficus-pro/Desktop/ai-cluster-auto-connect/src/common', 'common')],
+    datas=[(os.path.join(base_dir, 'src/common'), 'common')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

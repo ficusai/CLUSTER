@@ -13,9 +13,9 @@ if [ $# -lt 1 ]; then
     echo "       $0 --auto              # auto-discover and deploy"
     echo ""
     echo "Examples:"
-    echo "  $0 ficus-pro@10.0.0.103"
-    echo "  $0 u0_a377@10.0.0.108:8022 --ai-mode"
-    echo "  $0 root@10.0.0.136 --ai-mode"
+    echo "  $0 user@192.168.1.100"
+    echo "  $0 user@192.168.1.101:8022 --ai-mode"
+    echo "  $0 root@192.168.1.102 --ai-mode"
     echo "  $0 --auto                   # scan mDNS + UDP for workers"
     exit 1
 fi

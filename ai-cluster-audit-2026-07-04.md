@@ -1,8 +1,8 @@
 # AI Cluster Auto-Connect — Codebase Audit
 
 **Date:** 2026-07-04
-**Project:** `/home/ficus-pro/Documents/ai-cluster-auto-connect`
-**Desktop entry:** `/home/ficus-pro/Desktop/ai-cluster.desktop` (Exec = `launcher-notify.sh --root`)
+**Project:** `~/ai-cluster`
+**Desktop entry:** `~/Desktop/ai-cluster.desktop` (Exec = `launcher-notify.sh --root`)
 
 ## Verdict
 No critical defects remain. Root launches cleanly, serves the dashboard, starts local RPC + llama-server, and `/api/task/exec` is now authenticated.

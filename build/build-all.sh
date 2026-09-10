@@ -19,8 +19,8 @@ build_one() {
     local platform="$1"
     local arch="$2"
     local bin_name="cluster-${platform}-${arch}"
-    local work_dir="/tmp/pyibuild-${platform}-${arch}"
-    mkdir -p "$work_dir"
+    local work_dir="$(mktemp -d -t "pyibuild-${platform}-${arch}-XXXXXX")"
+    trap 'rm -rf "$work_dir"' EXIT
 
     echo "=== Building ${bin_name} ==="
     python3 -m PyInstaller \

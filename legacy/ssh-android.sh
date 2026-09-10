@@ -4,6 +4,9 @@
 #   ./ssh-android.sh <command>          # Run a command
 #   ./ssh-android.sh --persist          # Keep reconnecting (for long-lived sessions)
 
+ANDROID_USER="${ANDROID_USER:-u0_a377}"
+ANDROID_IP="${ANDROID_IP:-192.168.1.100}"
+
 SSH_OPTS=(
     -i "$(dirname "$0")/android_ssh_key"
     -o StrictHostKeyChecking=no
@@ -12,7 +15,7 @@ SSH_OPTS=(
     -o ServerAliveCountMax=3
     -o TCPKeepAlive=yes
     -p 8022
-    u0_a377@10.0.0.108
+    "${ANDROID_USER}@${ANDROID_IP}"
 )
 
 if [ "${1:-}" = "--persist" ]; then

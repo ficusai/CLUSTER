@@ -5,8 +5,8 @@
 #
 # Usage:
 #   ./start-worker.sh                     # Auto-detect (reads config)
-#   ROOT_IP=10.0.0.103 ./start-worker.sh  # Explicit root IP
-#   ./start-worker.sh --root-ip 10.0.0.103
+#   ROOT_IP=192.168.1.100 ./start-worker.sh  # Explicit root IP
+#   ./start-worker.sh --root-ip 192.168.1.100
 # =============================================================================
 set -euo pipefail
 

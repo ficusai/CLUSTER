@@ -42,7 +42,7 @@ python3 cluster.py stop
 ./ai-cluster-stop.sh
 ```
 
-The Desktop launcher (`/home/ficus-pro/Desktop/ai-cluster.desktop`) runs:
+The Desktop launcher (`~/Desktop/ai-cluster.desktop`) runs:
 
 ```bash
 ./launcher-notify.sh --root

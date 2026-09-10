@@ -4,11 +4,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PREFIX="${PREFIX:-${HOME}/.local}"
+BIN_DIR="${BIN_DIR:-${PREFIX}/bin}"
 BIN_NAME="ai-cluster"
-BIN_PATH="${HOME}/.local/bin/${BIN_NAME}"
-ICON_DIR="${HOME}/.local/share/icons/hicolor/scalable/apps"
-DESKTOP_DIR="${HOME}/.local/share/applications"
-DATA_DIR="${HOME}/.local/share/ai-cluster"
+BIN_PATH="${BIN_DIR}/${BIN_NAME}"
+ICON_DIR="${ICON_DIR:-${PREFIX}/share/icons/hicolor/scalable/apps}"
+DESKTOP_DIR="${DESKTOP_DIR:-${PREFIX}/share/applications}"
+DATA_DIR="${DATA_DIR:-${PREFIX}/share/ai-cluster}"
 
 echo "=== AI Cluster Auto-Connect (User Install) ==="
 echo ""
@@ -80,7 +82,7 @@ echo "[3/3] Installing desktop entries..."
 for DESKTOP_FILE in "${SCRIPT_DIR}/linux/"*.desktop; do
     if [ -f "$DESKTOP_FILE" ]; then
         BASENAME=$(basename "$DESKTOP_FILE")
-        sed "s|/usr/local/bin/ai-cluster|${HOME}/.local/bin/ai-cluster|g" "$DESKTOP_FILE" \
+        sed "s|/usr/local/bin/ai-cluster|${BIN_PATH}|g" "$DESKTOP_FILE" \
             > "${DESKTOP_DIR}/${BASENAME}"
         echo "  Installed ${BASENAME}"
     fi

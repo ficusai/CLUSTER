@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Robustness verification for AI Cluster Auto-Connect error-handling patch."""
 import ast
+import os
 import subprocess
 import sys
 from pathlib import Path
 
-BASE = Path("/home/ficus-pro/Documents/ai-cluster-auto-connect")
+BASE = Path(os.path.dirname(os.path.abspath(__file__)))
 
 report = []
 report.append("=== AI Cluster Error-Handling Robustness Report ===\n")

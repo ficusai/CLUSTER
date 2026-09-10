@@ -1,11 +1,18 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 
+base_dir = os.path.abspath('.')
 
 a = Analysis(
-    ['/home/ficus-pro/Documents/ai-cluster-auto-connect/cluster.py'],
+    [os.path.join(base_dir, 'cluster.py')],
     pathex=[],
     binaries=[],
-    datas=[('/home/ficus-pro/Documents/ai-cluster-auto-connect/src/common', 'common'), ('/home/ficus-pro/Documents/ai-cluster-auto-connect/src/root', 'root'), ('/home/ficus-pro/Documents/ai-cluster-auto-connect/src/worker', 'worker'), ('/home/ficus-pro/Documents/ai-cluster-auto-connect/src/gui', 'gui')],
+    datas=[
+        (os.path.join(base_dir, 'src/common'), 'common'),
+        (os.path.join(base_dir, 'src/root'), 'root'),
+        (os.path.join(base_dir, 'src/worker'), 'worker'),
+        (os.path.join(base_dir, 'src/gui'), 'gui')
+    ],
     hiddenimports=['PySide6', 'PySide6.QtCore', 'PySide6.QtGui', 'PySide6.QtWidgets', 'zeroconf', 'psutil', 'yaml', 'rich', 'rich.console', 'rich.table', 'rich.panel', 'rich.layout', 'rich.text', 'rich.live', 'rich.columns'],
     hookspath=[],
     hooksconfig={},
