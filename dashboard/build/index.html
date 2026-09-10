@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Cluster Dashboard</title>
+<style>
+  body { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; margin: 1rem; background:#0f1419; color:#e6e6e6; }
+  a { color:#79c0ff; }
+  table { border-collapse: collapse; margin-top: .5rem; }
+  th, td { text-align:left; padding:.35rem .6rem; border-bottom:1px solid #2a2f3a; }
+  th { color:#8b949e; }
+  .ok { color:#3fb950; } .warn { color:#d29922; } .err { color:#f85149; } .dim { color:#8b949e; }
+  .card { background:#16213e; border:1px solid #2a2a4a; border-radius:8px; padding:12px; margin-top:1rem; }
+  select, button { background:#0f3460; color:#e6e6e6; border:1px solid #2a2a4a; padding:.4rem .7rem; border-radius:6px; font-family: inherit; }
+  button { background:#e94560; border:none; cursor:pointer; font-weight:bold; }
+  button:hover { background:#c0392b; }
+  button:disabled { background:#555; color:#999; cursor:not-allowed; }
+  .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+<h1>AI Cluster Dashboard</h1>
+<p>Root API: <a href="/api/status">/api/status</a> · <a href="/api/ollama/models">/api/ollama/models</a></p>
+
+<div class="card">
+  <h2 style="margin:0 0 8px 0; color:#00d2ff;">Devices</h2>
+  <div id="devices">loading...</div>
+</div>
+
+<div class="card">
+  <h2 style="margin:0 0 8px 0; color:#00d2ff;">AI Models</h2>
+  <div id="models">
+    <p class="dim">Connect at least one worker device to unlock model selection.</p>
+  </div>
+</div>
+
+<pre id="raw" style="margin-top:1rem;"></pre>
+
+<script>
+async function refresh(){
+  try {
+    const r = await fetch('/api/status');
+    const j = await r.json();
+    document.getElementById('raw').textContent = JSON.stringify(j, null, 2);
+    renderDevices(j);
+    renderModels(j);
+  } catch (e) {
+    document.getElementById('raw').textContent = 'Error: ' + e;
+  }
+}
+
+function renderDevices(status){
+  const box = document.getElementById('devices');
+  const count = Number(status.worker_count || 0);
+  if (!count){
+    box.innerHTML = '<p class="dim">No worker devices connected yet.</p>';
+    return;
+  }
+  let html = '<p class="ok">' + count + ' worker(s) connected</p><table><tr><th>Hostname</th><th>Platform</th><th>CPU</th><th>RAM free</th><th>IP</th></tr>';
+  for (const w of (status.workers || [])){
+    html += '<tr><td>' + escapeHtml(w.hostname) + '</td><td>' + escapeHtml(w.platform) + '</td><td>' + escapeHtml(String(w.cpu_cores)) + '</td><td>' + escapeHtml(String(w.ram_available)) + ' GB</td><td>' + escapeHtml(w.ip) + '</td></tr>';
+  }
+  html += '</table>';
+  box.innerHTML = html;
+}
+
+async function loadModels(){
+  try {
+    const r = await fetch('/api/ollama/models');
+    const j = await r.json();
+    return j.data || [];
+  } catch (e){
+    return [];
+  }
+}
+
+async function selectModel(name){
+  const btn = document.getElementById('selectBtn');
+  if (btn){ btn.disabled = true; btn.textContent = 'Saving...'; }
+  try {
+    await fetch('/api/model/select', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({model: name})
+    });
+  } catch (e){
+    alert('Failed to select model: ' + e);
+  } finally {
+    if (btn){ btn.disabled = false; btn.textContent = 'Select'; }
+    refresh();
+  }
+}
+
+function renderModels(status){
+  const box = document.getElementById('models');
+  const count = Number(status.worker_count || 0);
+  if (!count){
+    box.innerHTML = '<p class="dim">Connect at least one worker device to unlock model selection.</p>';
+    return;
+  }
+  box.innerHTML = '<p class="dim">Loading models...</p>';
+  loadModels().then(models => {
+    if (!models.length){
+      box.innerHTML = '<p class="dim">No local models found on this system.</p>';
+      return;
+    }
+    const current = status.selected_model || '';
+    let html = '<div class="row"><select id="modelSelect">';
+    html += '<option value="">-- choose a model --</option>';
+    const seen = new Set();
+    for (const m of models){
+      const key = m.source + '::' + m.name;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const label = (m.source === 'ollama' ? 'Ollama' : 'Bundled') + ' · ' + m.name;
+      html += '<option value="' + escapeHtml(m.name) + '"' + (m.name === current ? ' selected' : '') + '>' + escapeHtml(label) + '</option>';
+    }
+    html += '</select><button id="selectBtn">Select</button></div>';
+    if (current){
+      html += '<p class="ok" style="margin-top:8px;">Active model: ' + escapeHtml(current) + '</p>';
+    }
+    box.innerHTML = html;
+    document.getElementById('selectBtn').addEventListener('click', () => {
+      const sel = document.getElementById('modelSelect');
+      if (sel && sel.value) selectModel(sel.value);
+    });
+  });
+}
+
+function escapeHtml(text){
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+refresh();
+setInterval(refresh, 15000);
+
+function startSSE(){
+  if (typeof EventSource === 'undefined') {
+    setInterval(refresh, 3000);
+    return;
+  }
+  try {
+    const es = new EventSource('/events');
+    es.addEventListener('status', (e) => {
+      try {
+        const j = JSON.parse(e.data);
+        document.getElementById('raw').textContent = JSON.stringify(j, null, 2);
+        renderDevices(j);
+        renderModels(j);
+      } catch (err){}
+    });
+    es.onerror = () => {
+      es.close();
+      setInterval(refresh, 3000);
+    };
+  } catch (e) {
+    setInterval(refresh, 3000);
+  }
+}
+startSSE();
+</script>
+</body>
+</html>

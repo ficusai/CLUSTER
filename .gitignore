@@ -7,8 +7,11 @@ __pycache__/
 *.so
 *.pyd
 *.egg-info/
-dist/
-build/
+dist/*
+!dist/.gitkeep
+build/*
+!build/*.sh
+!build/.gitkeep
 .eggs/
 .pytest_cache/
 .mypy_cache/
