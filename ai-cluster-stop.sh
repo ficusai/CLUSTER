@@ -123,10 +123,10 @@ stop_pattern() {
 stop_pattern "${APP_DIR}/cluster-supervisor.sh" "cluster supervisor"
 stop_pattern "${APP_DIR}/quick-start-cluster.sh" "quick-start launcher"
 stop_pattern "${APP_DIR}/ai-cluster-events.sh" "events window"
-stop_pattern "llama-server" "llama server"
-stop_pattern "rpc-server" "rpc server"
+stop_pattern "${APP_DIR}/.*llama-server" "llama server"
+stop_pattern "${APP_DIR}/.*rpc-server" "rpc server"
 stop_pattern "${APP_DIR}/dist/cluster-linux-x86_64" "cluster binary (linux)"
-stop_pattern "python3 .*cluster\.py" "cluster binary (python)"
+stop_pattern "python3 .*${APP_DIR}/cluster\.py" "cluster binary (python)"
 
 # 3) Clean stale PID files
 for f in "${PID_FILE}"; do

@@ -2,20 +2,26 @@
 # Install all: pip install -r requirements.txt
 # Or install individually: pip install PySide6
 
+# Network Topology & Graphing
+networkx>=3.0
+
 # Network Discovery
-zeroconf    # mDNS service discovery for zero-config networking
+zeroconf>=0.131.0    # mDNS service discovery for zero-config networking
 
 # System Monitoring
-psutil      # CPU, RAM, and system information
+psutil>=5.9.0      # CPU, RAM, and system information
 
 # Terminal UI (fallback when GUI not available)
-rich        # Terminal dashboard with live display
+rich>=13.0.0        # Terminal dashboard with live display
 
 # Desktop GUI (optional — for --gui mode)
 PySide6     # Qt6 bindings for desktop GUI + system tray
 
 # Configuration
-PyYAML      # config.yaml parsing
+pyyaml>=6.0      # config.yaml parsing
+
+# HTTP Requests
+requests>=2.31.0
 
 # Build
 pyinstaller # Build standalone executables (dev dependency)

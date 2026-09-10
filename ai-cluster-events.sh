@@ -55,6 +55,7 @@ cat <<INTRO
 INTRO
 
 export PATH="${HOME}/.cargo/bin:${HOME}/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:${PATH}"
+export PYTHONUNBUFFERED=1
 
 bash_log_success "=== Launch started ==="
 bash_log "APP_DIR=${APP_DIR}"
@@ -124,7 +125,7 @@ else
     touch "${SESSION_LOG}" "${MASTER_LOG}"
 
     # Build command array so paths with spaces are handled safely.
-    CMD=(stdbuf -oL -eL)
+    CMD=()
     if [ -x "${BIN}" ]; then
         CMD+=("${BIN}")
     else
@@ -134,7 +135,7 @@ else
     fi
     CMD+=(--root)
 
-    env PATH="${PATH}" HOME="${HOME}" USER="${USER:-$(whoami)}" \
+    env PATH="${PATH}" HOME="${HOME}" USER="${USER:-$(whoami)}" PYTHONUNBUFFERED=1 \
         "${CMD[@]}" \
         2>&1 | tee -a "${SESSION_LOG}" "${MASTER_LOG}" &
     LAUNCH_PID=$!
@@ -194,10 +195,16 @@ fi
 echo
 
 if [ -n "${RUN_PID:-}" ]; then
-    stdbuf -oL tail -n 0 -F "--pid=${RUN_PID}" \
+    tail -f \
         "${MASTER_LOG}" \
         "${SESSION_LOG}" \
-        "${LOG_DIR}"/*.log 2>/dev/null || true
+        "${LOG_DIR}"/*.log 2>/dev/null &
+    TAIL_PID=$!
+    while [ -n "${RUN_PID:-}" ] && kill -0 "${RUN_PID}" 2>/dev/null; do
+        sleep 1
+    done
+    kill "${TAIL_PID}" 2>/dev/null || true
+    wait "${TAIL_PID}" 2>/dev/null || true
 fi
 
 kill "${STATUS_PID}" 2>/dev/null || true

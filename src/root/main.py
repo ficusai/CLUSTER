@@ -1038,7 +1038,24 @@ class ClusterRoot:
 
             do_PUT = do_POST
 
-        self.http_server = ThreadingHTTPServer(("0.0.0.0", self.http_port), APIHandler)
+        start_port = self.http_port
+        server = None
+        for offset in range(10):
+            probe_port = start_port + offset
+            try:
+                server = ThreadingHTTPServer(("0.0.0.0", probe_port), APIHandler)
+                if probe_port != start_port:
+                    self.log(f"Port {start_port} in use; using fallback HTTP port {probe_port}")
+                self.http_port = probe_port
+                break
+            except OSError as e:
+                if offset == 9:
+                    self.log(f"Failed to bind HTTP server on ports {start_port}-{probe_port}: {e}")
+                    if self.ui:
+                        self.ui.set_service("HTTP API", "error", str(e))
+                    raise
+
+        self.http_server = server
         t = threading.Thread(target=self.http_server.serve_forever, daemon=True)
         t.start()
         self.log(f"HTTP API: http://{self._get_local_ip()}:{self.http_port}")

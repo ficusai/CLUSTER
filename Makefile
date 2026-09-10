@@ -1,6 +1,11 @@
-.PHONY: help install uninstall build run clean
+.PHONY: help install uninstall install-local uninstall-local build run clean
 
+ifeq ($(shell id -u), 0)
 PREFIX ?= /usr/local
+else
+PREFIX ?= $(HOME)/.local
+endif
+
 BINDIR ?= $(PREFIX)/bin
 BINARY_NAME=ai-cluster
 PLATFORM:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
@@ -11,12 +16,14 @@ help:
 	@echo "AI Cluster Auto-Connect — Makefile"
 	@echo ""
 	@echo "Targets:"
-	@echo "  build       Build the executable (requires pyinstaller)"
-	@echo "  install     Build and install system-wide (requires sudo)"
-	@echo "  uninstall   Remove system-wide installation (requires sudo)"
-	@echo "  run         Run in terminal interactive mode"
-	@echo "  run-gui     Run with desktop GUI (requires PySide6)"
-	@echo "  clean       Remove build artifacts"
+	@echo "  build           Build the executable (requires pyinstaller)"
+	@echo "  install         Build and install system-wide (requires sudo)"
+	@echo "  uninstall       Remove system-wide installation (requires sudo)"
+	@echo "  install-local   Install for current user (~/.local)"
+	@echo "  uninstall-local Remove user-level installation"
+	@echo "  run             Run in terminal interactive mode"
+	@echo "  run-gui         Run with desktop GUI (requires PySide6)"
+	@echo "  clean           Remove build artifacts"
 
 build:
 	@bash build/build.sh
@@ -32,6 +39,12 @@ uninstall:
 	@sudo rm -f /etc/systemd/system/ai-cluster*.service || true
 	@sudo systemctl daemon-reload 2>/dev/null || true
 	@echo "Uninstalled."
+
+install-local:
+	@PREFIX="$(PREFIX)" bash install-local.sh
+
+uninstall-local:
+	@PREFIX="$(PREFIX)" bash install-local.sh --uninstall
 
 run:
 	python3 cluster.py

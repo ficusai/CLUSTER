@@ -99,11 +99,44 @@ def _get_local_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         s.connect(("8.8.8.8", 53))
-        return s.getsockname()[0]
+        ip = s.getsockname()[0]
+        if ip and not ip.startswith("127."):
+            return ip
     except Exception:
-        return "127.0.0.1"
+        pass
     finally:
         s.close()
+
+    try:
+        hostname = socket.gethostname()
+        for addr in socket.getaddrinfo(hostname, None, family=socket.AF_INET):
+            ip = addr[4][0]
+            if ip and not ip.startswith("127."):
+                return ip
+    except Exception:
+        pass
+
+    try:
+        _, _, ips = socket.gethostbyname_ex(socket.gethostname())
+        for ip in ips:
+            if ip and not ip.startswith("127."):
+                return ip
+    except Exception:
+        pass
+
+    try:
+        import netifaces
+        for iface in netifaces.interfaces():
+            addrs = netifaces.ifaddresses(iface)
+            if netifaces.AF_INET in addrs:
+                for addr_info in addrs[netifaces.AF_INET]:
+                    ip = addr_info.get("addr")
+                    if ip and not ip.startswith("127."):
+                        return ip
+    except Exception:
+        pass
+
+    return "127.0.0.1"
 
 
 class ClusterWorker:
@@ -389,6 +422,32 @@ class ClusterWorker:
         return None
 
     @LogHub.log_call("WORKER")
+    def _kill_process_tree(self, proc):
+        if proc is None or not hasattr(proc, "pid") or not isinstance(proc.pid, int) or proc.pid <= 0:
+            return
+        try:
+            if proc.poll() is None:
+                try:
+                    pg = os.getpgid(proc.pid)
+                    os.killpg(pg, signal.SIGTERM)
+                except ProcessLookupError:
+                    return
+                except OSError as exc:
+                    LogHub().warn("WORKER", f"SIGTERM to pgid {proc.pid} failed: {exc}")
+                try:
+                    proc.wait(timeout=3)
+                except subprocess.TimeoutExpired:
+                    try:
+                        pg = os.getpgid(proc.pid)
+                        os.killpg(pg, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+                    except OSError as exc:
+                        LogHub().warn("WORKER", f"SIGKILL to pgid {proc.pid} failed: {exc}")
+        except OSError as exc:
+            LogHub().warn("WORKER", f"_kill_process_tree failed for PID {proc.pid}: {exc}")
+
+    @LogHub.log_call("WORKER")
     def _handle_start_rpc(self, payload):
         self.log("[AI_MODE] _handle_start_rpc entered")
         if self.rpc_process and self.rpc_process.poll() is None:
@@ -424,6 +483,7 @@ class ClusterWorker:
                 stdout=rpc_log_f,
                 stderr=subprocess.STDOUT,
                 text=True,
+                start_new_session=True,
             )
         time.sleep(1)
         if self.rpc_process.poll() is None:
@@ -433,11 +493,7 @@ class ClusterWorker:
     @LogHub.log_call("WORKER")
     def _handle_stop_rpc(self, payload):
         if self.rpc_process and self.rpc_process.poll() is None:
-            self.rpc_process.terminate()
-            try:
-                self.rpc_process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                self.rpc_process.kill()
+            self._kill_process_tree(self.rpc_process)
             return {"status": "stopped"}
         return {"status": "not_running"}
 
@@ -478,8 +534,8 @@ class ClusterWorker:
                 self.conn.close()
             except Exception:
                 pass
-        if self.rpc_process and self.rpc_process.poll() is None:
-            self.rpc_process.terminate()
+        if self.rpc_process:
+            self._kill_process_tree(self.rpc_process)
         self.stop_advertising()
         send_notification("Cluster Worker", "Shutting down")
         if self.ui:

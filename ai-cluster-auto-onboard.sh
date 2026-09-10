@@ -32,7 +32,7 @@ ok()    { log "OK    $*"; }
 # Detect local subnet
 detect_subnet() {
     local ip
-    ip="$(hostname -I 2>/dev/null | awk '{print $1}' || true)"
+    ip="$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{print $7}' || hostname -i 2>/dev/null || echo '192.168.1.100')"
     if [[ "$ip" =~ ^([0-9]+\.[0-9]+\.[0-9]+)\. ]]; then
         echo "${BASH_REMATCH[1]}"
         return 0
@@ -81,7 +81,7 @@ onboard_android() {
 
     info "Android ${ip}: starting worker..."
     local ROOT_IP
-    ROOT_IP="$(hostname -I 2>/dev/null | awk '{print $1}' || echo '192.168.1.100')"
+    ROOT_IP="$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{print $7}' || hostname -i 2>/dev/null || echo '192.168.1.100')"
     start_worker_remote "${SSH_BASE}" "${ROOT_IP}"
 
     sleep 2
@@ -123,7 +123,7 @@ onboard_linux() {
 
     info "Linux ${ip}: starting worker..."
     local ROOT_IP
-    ROOT_IP="$(hostname -I 2>/dev/null | awk '{print $1}' || echo '192.168.1.100')"
+    ROOT_IP="$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{print $7}' || hostname -i 2>/dev/null || echo '192.168.1.100')"
     start_worker_remote "${SSH_BASE}" "${ROOT_IP}"
 
     sleep 2

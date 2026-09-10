@@ -148,23 +148,23 @@ stop_old_root() {
     for sig in TERM KILL; do
         # Match only root cluster, local rpc-server, and local llama-server, not this launcher
         local pids
-        pids=$(pgrep -f "python3 .*cluster\\.py --root" 2>/dev/null || true)
+        pids=$(pgrep -f "${PROJECT_DIR}/.*cluster\\.py --root" 2>/dev/null || true)
         [ -n "$pids" ] && killed=$((killed + $(echo "$pids" | wc -l)))
         if [ -n "$pids" ]; then
             echo "$pids" | xargs kill -"$sig" 2>/dev/null || true
         fi
-        pids=$(pgrep -f "rpc-server" 2>/dev/null || true)
+        pids=$(pgrep -f "${PROJECT_DIR}/.*rpc-server" 2>/dev/null || true)
         [ -n "$pids" ] && killed=$((killed + $(echo "$pids" | wc -l)))
         if [ -n "$pids" ]; then
             echo "$pids" | xargs kill -"$sig" 2>/dev/null || true
         fi
-        pids=$(pgrep -f "llama-server" 2>/dev/null || true)
+        pids=$(pgrep -f "${PROJECT_DIR}/.*llama-server" 2>/dev/null || true)
         [ -n "$pids" ] && killed=$((killed + $(echo "$pids" | wc -l)))
         if [ -n "$pids" ]; then
             echo "$pids" | xargs kill -"$sig" 2>/dev/null || true
         fi
         [ "$sig" = "TERM" ] && sleep 1
-        if ! pgrep -f "cluster\.py --root" >/dev/null 2>&1; then break; fi
+        if ! pgrep -f "${PROJECT_DIR}/.*cluster\\.py --root" >/dev/null 2>&1; then break; fi
     done
     if [ "$killed" -gt 0 ]; then
         warn "Stopped $killed stale cluster process(es)."

@@ -43,7 +43,7 @@ stop_stale() {
     pids="${pids}$(pgrep -f "${PROJECT_DIR}/ai-cluster-desktop-root.sh" 2>/dev/null || true)"
     # Exclude this wrapper's own PID and its parent so stop_stale does not
     # kill the currently-running launcher before exec python3.
-    pids=$(printf '%s\n' ${pids} | grep -vE "^${my_pid}$|^${my_ppid}$" | tr '\n' ' ' | sed 's/ $//')
+    pids=$(printf '%s\n' "${pids}" | grep -vE "^${my_pid}$|^${my_ppid}$" || true)
     if [ -n "${pids}" ]; then
         log "Stopping stale root cluster process(es)..."
         echo "${pids}" | xargs -r kill -TERM 2>/dev/null || true

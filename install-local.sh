@@ -12,6 +12,17 @@ ICON_DIR="${ICON_DIR:-${PREFIX}/share/icons/hicolor/scalable/apps}"
 DESKTOP_DIR="${DESKTOP_DIR:-${PREFIX}/share/applications}"
 DATA_DIR="${DATA_DIR:-${PREFIX}/share/ai-cluster}"
 
+if [ "${1:-}" = "--uninstall" ] || [ "${1:-}" = "uninstall" ]; then
+    echo "=== Uninstalling AI Cluster (User Install) ==="
+    rm -f "${BIN_PATH}"
+    rm -f "${ICON_DIR}/ai-cluster.svg"
+    rm -f "${DESKTOP_DIR}/ai-cluster"*.desktop
+    rm -rf "${DATA_DIR}"
+    gtk-update-icon-cache "${HOME}/.local/share/icons/hicolor/" 2>/dev/null || true
+    echo "Uninstalled from ${PREFIX}."
+    exit 0
+fi
+
 echo "=== AI Cluster Auto-Connect (User Install) ==="
 echo ""
 
@@ -32,14 +43,20 @@ if [ -f "$LATEST_BINARY" ]; then
     install -m 755 "$LATEST_BINARY" "$BIN_PATH"
     echo "  Installed to ${BIN_PATH}"
 else
-    FOUND=$(ls -t "${DIST_DIR}"/cluster-* 2>/dev/null | head -1)
+    FOUND=$(ls -t "${DIST_DIR}"/cluster-* 2>/dev/null | head -1 || true)
     if [ -n "$FOUND" ]; then
         install -m 755 "$FOUND" "$BIN_PATH"
         echo "  Installed ${FOUND} to ${BIN_PATH}"
     else
-        echo "  ERROR: No built binary found in ${DIST_DIR}"
-        echo "  Run build/build.sh first."
-        exit 1
+        echo "  No built binary found in ${DIST_DIR}. Using Python fallback mode..."
+        echo "  Installing Python dependencies..."
+        python3 -m pip install --user -r "${SCRIPT_DIR}/requirements.txt"
+        cat > "${BIN_PATH}" << EOF
+#!/usr/bin/env bash
+exec python3 "${SCRIPT_DIR}/cluster.py" "\$@"
+EOF
+        chmod +x "${BIN_PATH}"
+        echo "  Installed script wrapper to ${BIN_PATH}"
     fi
 fi
 
