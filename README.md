@@ -1,84 +1,84 @@
 # AI Cluster Auto-Connect
 
 **Version:** 1.3.0  
-**Status:** Active development; Gen-2 Python control plane in daily use on Fedora + Android.  
+**Status:** Active development; Gen-2 Python control plane optimized for cross-platform Linux distributions (Fedora, Debian/Ubuntu, Arch, Alpine, Termux, Android).  
 **License:** MIT
 
 ---
 
 ## What it is
 
-A cross-platform launcher for distributed AI inference using llama.cpp RPC. One device becomes the **root** (coordinator + HTTP API); any number of devices become **workers** (CPU/RAM donors). Workers auto-discover the root via mDNS/Zeroconf or fall back to UDP broadcast — no manual IP configuration required on the same broadcast domain.
+A cross-platform launcher for distributed AI inference using llama.cpp RPC. One device becomes the **root** (coordinator + HTTP API + Web Dashboard); any number of devices become **workers** (CPU/RAM donors). Workers auto-discover the root via mDNS/Zeroconf or fall back to UDP broadcast — no manual IP configuration required on the same broadcast domain.
 
-Primary platform: **Linux (Fedora)** for the root node. Python workers run on Linux. Android (Termux) and jailbroken iPhone workers run the upstream llama.cpp `rpc-server` binary directly.
+Primary platform: **Linux** for the root coordinator and workers. Heterogeneous workers are supported across x86_64, ARM64, Android (Termux), and mobile devices running the upstream `llama.cpp` `rpc-server` binary directly.
 
 ---
 
-## Setup
+## Quick Start
 
 ```bash
-# Python deps + test deps
+# Install Python dependencies
 pip install -r requirements.txt
 
 # Start root device
 python3 cluster.py root
 
-# Start worker from same directory
+# Start worker node from another machine
 python3 cluster.py worker
 
-# Launch GUI
+# Launch PySide6 GUI (optional)
 python3 cluster.py gui
 ```
 
 ---
 
-## Quick start
+## Installation
+
+### Non-Root / User-Space Installation (Recommended)
 
 ```bash
-# Run interactively (prompts for mode)
-python3 cluster.py
-
-# Or use the bash wrapper
-./launcher.sh root
-./launcher.sh worker
-./launcher.sh gui
-
-# Build a single binary
-python3 cluster.py build
+# Install binary & desktop launcher to ~/.local/bin and ~/.local/share/applications
+make install-local
 # or
-make build
+./install-local.sh
+```
+
+### System-Wide Installation (Root / Sudo)
+
+```bash
+# Install binary to /usr/local/bin and systemd services to /etc/systemd/system
+make install
 ```
 
 ---
 
-## Features
+## Key Features & Optimizations
 
-- Zero-config root discovery (mDNS/Zeroconf + UDP broadcast fallback)
-- Heterogeneous nodes (x86_64 + ARM64 mixed)
-- Python asyncio control plane with worker registry and heartbeat health checks
-- Single binary via PyInstaller (`cluster-linux-x86_64.spec`)
-- Desktop GUI (optional, PySide6) + system tray
-- Cross-platform SSH deployment helper (`deploy/deploy-worker.sh`)
-- Auto-restart of root-side `llama-server` on port fallback (8081+)
+- **Zero-Config Root Discovery:** Dual-track mDNS/Zeroconf + UDP broadcast fallback with offline LAN IP resolution (works without internet routing).
+- **Dynamic Port Collision Probing:** Automatic port fallback for HTTP API (8080+) and llama-server (8081+) if default ports are occupied.
+- **Process Tree & Signal Safety:** Process-group level SIGTERM/SIGKILL termination (`start_new_session=True`) ensures no orphan `llama-server` or `rpc-server` processes are left running.
+- **Universal Linux & Non-Root Portability:** Supports both systemd and non-systemd init systems (OpenRC, runit, dinit), custom `PREFIX` user-space installs (`~/.local`), and POSIX shell compatibility.
+- **Heterogeneous Architecture Support:** Native execution across x86_64 and ARM64 nodes.
+- **Single Binary Releases:** PyInstaller support for standalone root, worker, and combined executables (`make build`).
 
 ---
 
-## Project layout
+## Project Layout
 
 ```
-ai-cluster-auto-connect/
+CLUSTER/
 ├── cluster.py                  # Unified CLI entry point
-├── launcher.sh                 # Bash wrapper used by .desktop/systemd
+├── launcher.sh                 # Portable bash wrapper used by .desktop/systemd
 ├── launcher-notify.sh          # Desktop notification helper for root
 ├── notify-action.py            # Notification action dispatcher
 ├── cluster-dashboard.py        # Standalone Rich TUI dashboard
 ├── config.yaml                 # Cluster-wide configuration
-├── requirements.txt            # Python dependencies
-├── Makefile                    # install / uninstall / test / build / clean
+├── requirements.txt            # Python dependencies with minimum bounds
+├── Makefile                    # install / install-local / test / build / clean
 ├── README.md                   # This file
 ├── AGENTS.md                   # AI agent project context
 ├── BLUEPRINT.md                # Editable project map with ACA-* codes
-├── INSTALLATION.md             # Deployment guide
+├── INSTALLATION.md             # Deployment & multi-distro guide
 ├── ARCHITECTURE.md             # Data flow, ports, class reference
 ├── IMPLEMENTATION-PLAN.md      # Feature status and roadmap
 ├── OPS.md                      # Internal runbook
@@ -89,31 +89,28 @@ ai-cluster-auto-connect/
 ├── ai-cluster-web.sh           # Web dashboard helper
 ├── setup-termux.sh             # Termux bootstrap for Android
 ├── src/
-│   ├── common/                   # protocol, discovery, loghub, progress_ui
-│   ├── root/                     # Coordinator
-│   ├── worker/                   # Auto-connect worker
-│   └── gui/                      # PySide6 GUI + system tray
+│   ├── common/                 # Protocol, discovery, loghub, progress_ui
+│   ├── root/                   # Coordinator
+│   ├── worker/                 # Auto-connect worker
+│   └── gui/                    # PySide6 GUI + system tray
 ├── build/                      # PyInstaller build scripts
 ├── deploy/                     # SSH deployment helper
 ├── linux/                      # systemd services + desktop entry templates
 ├── tests/                      # pytest suite
-├── legacy/                     # Gen-1 bash / binaries / model files
-├── dashboard/build/index.html  # Static HTML dashboard
-└── dist/                       # Build output
+└── dist/                       # PyInstaller build output
 ```
 
 ---
 
-## Ports
+## Network Ports
 
-| Port | Service |
-|------|---------|
-| 52053 | Root TCP control plane (worker registration, task dispatch, heartbeat) |
-| 52052 | UDP discovery broadcast |
-| 50052 | llama.cpp RPC backend |
-| 8080 | Root HTTP API + dashboard |
-| 8081+ | llama-server HTTP API slots (auto-fallback if 8081 busy) |
-| 8022 | Termux SSH default (Android) |
+| Port | Service | Description |
+|------|---------|-------------|
+| 52053 | Root TCP | Control plane (worker registration, task dispatch, heartbeat) |
+| 52052 | UDP Broadcast | Auto-discovery listener & announcer |
+| 50052 | RPC Backend | llama.cpp RPC server default port |
+| 8080+ | Root HTTP API | Web dashboard & control REST API (auto-probes 8080, 8081...) |
+| 8081+ | llama-server | LLaMA HTTP API slots (auto-fallback if port busy) |
 
 ---
 
@@ -121,54 +118,44 @@ ai-cluster-auto-connect/
 
 | File | Purpose |
 |------|---------|
-| `README.md` | Overview and quick start |
-| `AGENTS.md` | AI agent project context |
-| `BLUEPRINT.md` | Editable project map with ACA-* codes |
-| `INSTALLATION.md` | Linux, macOS, Windows, systemd notes |
+| `README.md` | Overview, installation, and quick start |
+| `INSTALLATION.md` | Linux distros, non-root installation, systemd & desktop integration |
 | `ARCHITECTURE.md` | Data flow, ports, class reference |
+| `BLUEPRINT.md` | Editable project map with ACA-* codes |
 | `IMPLEMENTATION-PLAN.md` | Feature status and roadmap |
-| `OPS.md` | Internal runbook |
-
----
-
-## Troubleshooting
-
-- **Port 8081 already in use (llama-server won’t start)**  
-  The root node auto-falls back to 8082/8083/... and updates `/api/status` URLs accordingly. If issues persist, stop the old `llama-server` process and restart.
-
-- **Orphan processes after stop**  
-  The root process kills its spawned process tree for `rpc-server` and `llama-server`. If leftovers remain, run `python3 cluster.py stop` or kill them manually.
-
-- **No workers discovered**  
-  Zeroconf/mDNS is optional; UDP broadcast works without it. Ensure devices are on the same broadcast domain and firewall allows TCP 52052/52053 and UDP 52052.
-
-- **Desktop launcher always opens a terminal**  
-  This is expected for direct invocation. For background/system-tray launch, use the systemd units under `linux/` instead.
+| `OPS.md` | Internal runbook & operations |
+| `AGENTS.md` | AI agent project context |
 
 ---
 
 ## Security
 
-- `/api/task/exec` endpoints allow remote command execution on workers from LAN devices. Harden with authentication before exposing beyond trusted networks.
-- `cluster.py worker` auto-discovers root devices; restrict to managed networks.
-- Legacy SSH keys live under `legacy/`; add them to `~/.ssh/config` with restricted permissions (`600`).
+- `/api/task/exec` allows remote task execution on connected workers. Configure `security.api_token` in `config.yaml` or set `AI_CLUSTER_API_TOKEN` env variable when deploying on non-isolated networks.
+- All secrets, token keys, and private infrastructure details are sanitized prior to public deployment.
+- Process tree cleanups use isolated session groups to prevent terminating unrelated host processes.
 
 ---
 
-## Build
+## Build & Test
 
 ```bash
-make build          # current platform via PyInstaller
-make run            # run from source (interactive)
-make run-root       # run as root
-make run-worker     # run as worker
-make clean          # remove build artifacts
+# Run test suite
+pytest tests/
+
+# Run system robustness verification
+python3 verify_ai_cluster_robustness.py
+
+# Build single binaries via PyInstaller
+make build
+
+# Install to user home directory ~/.local/bin
+make install-local
 ```
 
 ---
 
-## Support
+## Support & Troubleshooting
 
-- Docs: `INSTALLATION.md`, `ARCHITECTURE.md`, `OPS.md`
-- Issues: log output is verbose by design; `logs/` contains rotated session logs.
-- Tests: `pytest` from the project root.
+- **Logs:** Verbose rotated session logs are preserved under `logs/`.
+- **Port Conflicts:** HTTP API and LLaMA server automatically attempt fallback ports. Check `http://localhost:8080/api/status` for active ports.
+- **Firewall:** Ensure local network firewalls permit TCP `52053`, `8080` and UDP `52052`.
