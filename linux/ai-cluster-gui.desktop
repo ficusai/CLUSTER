@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=AI Cluster (GUI)
+GenericName=AI Cluster Desktop GUI
+Comment=Launch the AI cluster with desktop GUI and system tray
+Exec=/usr/local/bin/ai-cluster --gui
+Icon=ai-cluster
+Terminal=false
+Categories=System;
+Keywords=cluster;ai;gui;inference;
+StartupNotify=true

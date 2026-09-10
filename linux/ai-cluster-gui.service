@@ -1,0 +1,22 @@
+[Unit]
+Description=AI Cluster Auto-Connect — Desktop GUI Service
+Documentation=https://github.com/anomalyco/ai-cluster-auto-connect
+After=network-online.target network.target graphical-session.target
+Wants=network-online.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+User=%u
+ExecStart=/usr/local/bin/ai-cluster --gui
+Restart=on-failure
+RestartSec=5
+RestartPreventExitStatus=0
+Environment=DISPLAY=:0
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=journal
+StandardError=journal
+TimeoutStopSec=15
+
+[Install]
+WantedBy=graphical-session.target

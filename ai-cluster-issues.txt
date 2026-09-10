@@ -1,0 +1,112 @@
+AI CLUSTER AUTO-CONNECT — ISSUE AUDIT
+=======================================
+Target: connect devices to one root device, as automatic as possible.
+Scope: project source + live logs.
+
+CRITICAL (functionality broken)
+--------------------------------
+1. WEB DASHBOARD MISSING
+   root/main.py:590 resolves dashboard/build to:
+     /home/ficus-pro/Documents/ai-cluster-auto-connect/dashboard/build
+   That directory does not exist.
+   Effect: xdg-open http://localhost:8080 shows empty directory listing,
+   not the intended dashboard.
+
+2. MDNS NAME COLLISION CRASH
+   logs/old logs/2026-06-28-01-19-43.log shows:
+     zeroconf._exceptions.NonUniqueNameException
+   This is unhandled and crashes mDNS advertising/root discovery whenever
+   another device on the LAN announces the same hostname+service.
+   Effect: cluster becomes invisible to mDNS-based discovery.
+
+3. CROSS-PROJECT DEPENDENCY (violates AGENTS.md)
+   launcher-notify.sh calls:
+     /home/ficus-pro/Documents/notify-action.py
+   That file sits outside the ai-cluster-auto-connect project folder.
+   Effect: moving/renaming the project or cleaning Documents/ breaks the
+   launcher silently.
+
+4. LEGACY CONFIG SCRIPT MISSING
+   legacy/start-cluster.sh sources cluster-config.env, but that file
+   does not exist in the project (only config.yaml exists).
+   Effect: legacy one-click start fails with unbound variables.
+
+MODERATE (automation / reliability)
+-----------------------------------
+5. DESKTOP LAUNCHER NOT AUTOMATIC
+   The .desktop Exec runs launcher-notify.sh → interactive menu.
+   User must manually choose "1" every session.
+   There is no --root shortcut in the desktop entry.
+   Effect: violates "as automatic as possible" goal.
+
+6. PTYXIS OPTION LIKELY WRONG
+   launcher-notify.sh uses: ptyxis -d '/path'
+   The -d flag is not a standard ptyxis working-directory option
+   (ptyxis uses different syntax for initial cwd).
+   Effect: log terminal may open in wrong directory.
+
+7. UDP LISTENER INTERMITTENT FAILURE
+   .run.log: "[DISCOVERY] EXCEPTION: UDP listen loop failed"
+   First-boot UDP discovery is unreliable; mDNS fallback masks this,
+   but pure-UDP network segments won't discover the root.
+
+8. cluster-dashboard.py LOG PATH WRONG
+   cluster-dashboard.py:29 expects logs/current.log
+   No current.log exists; loghub.py names files by timestamp.
+   Effect: dashboard UI shows "No log output yet" forever.
+
+9. WORKER auto_start_rpc LOOP
+   root/main.py:834 dispatches MSG_TASK "start_rpc" every 15s to all
+   workers, regardless of whether rpc-server is already running.
+   Effect: unnecessary network/process noise; workers spawn redundant
+   rpc-server instances on some code paths.
+
+10. WORKER _handle_exec_async RETURNS WRONG PID
+    worker/main.py:336-337 returns t.native_id (thread ID) as pid.
+    It should return the Popen PID.
+    Effect: any UI/API reporting "started process PID" is wrong.
+
+SECURITY / HARDENING
+--------------------
+11. NO AUTH ON HTTP API
+    /api/task/exec lets anyone on the LAN run shell commands on workers.
+    Combined with open registration, any device on the network becomes
+    a remote execution target.
+
+12. SSH STRICT_HOST_KEY_CHECKING DISABLED
+    launcher.sh uses -o StrictHostKeyChecking=no for all Android SSH.
+    Vulnerable to MITM on untrusted networks.
+
+13. SHELL=TRUE EVERYWHERE
+    _handle_exec and _handle_exec_async pass shell=True to subprocess.
+    Combined with issue #11, this is full remote code execution
+    with no sandbox.
+
+14. MDNS/IPv4 ONLY
+    discovery.py uses socket.inet_aton(), which is IPv4-only.
+    IPv6-only or dual-stack environments cannot use mDNS discovery.
+
+MINOR
+-----
+15. _discovered_via_udp IN src/root/main.py is a set that grows
+    unbounded if many random broadcast sources appear.
+
+16. config.yaml references ./legacy/android_ssh_key for iOS key too.
+    That key path is also listed for Linux deploy_credentials,
+    which is wrong for normal Linux workers (they use the repo directly).
+
+17. Hardcoded Android fallback IP 192.168.42.129 (ADB tether default)
+    may be wrong for actual WiFi networks after USB onboarding.
+
+RECOMMENDED FIX ORDER
+----------------------
+P0: add dashboard/build (or remove xdg-open), catch NonUniqueNameException,
+    fix notify-action.py path, remove cluster-config.env from legacy.
+P1: change desktop Exec to --root, fix ptyxis -d spelling, fix
+    current.log path in cluster-dashboard.py.
+P2: stop auto_start_rpc loop, fix async pid, add HTTP API token auth,
+    catch zeroconf conflicts with unique instance names.
+
+Logs referenced:
+  /home/ficus-pro/Documents/ai-cluster-auto-connect/.run.log
+  /home/ficus-pro/Documents/ai-cluster-auto-connect/logs/old logs/2026-06-28-01-19-43.log

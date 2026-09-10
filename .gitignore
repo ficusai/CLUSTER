@@ -1,0 +1,54 @@
+# AI Cluster Auto-Connect — Git Ignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs & runtime data
+logs/
+*.log
+*.pid
+.run.log
+.run.pid
+
+# Environment / secrets
+.env
+.env.local
+*.pem
+*.key
+android_ssh_key
+android_ssh_key.pub
+*.p12
+*.pfx
+
+# Binaries and Models
+legacy/bin/llama-server
+legacy/bin/rpc-server
+legacy/bin/*.so*
+legacy/models/
+*.gguf
+
+# Tooling and Caches
+.codescope.json
+.loomignore
+.obsidian-index/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

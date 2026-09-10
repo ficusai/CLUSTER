@@ -1,0 +1,24 @@
+[Unit]
+Description=AI Cluster Auto-Connect — Worker Node
+Documentation=https://github.com/anomalyco/ai-cluster-auto-connect
+After=network-online.target network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%u
+ExecStart=/usr/local/bin/ai-cluster --worker --no-ui
+Restart=on-failure
+RestartSec=10
+StartLimitBurst=5
+StartLimitIntervalSec=60
+LimitNOFILE=65536
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONUNBUFFERED=1
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

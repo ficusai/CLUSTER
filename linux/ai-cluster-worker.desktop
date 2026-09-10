@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=AI Cluster (Worker)
+GenericName=AI Cluster Worker Node
+Comment=Join a root device as a worker node
+Exec=/usr/local/bin/ai-cluster --worker --no-ui
+Icon=ai-cluster
+Terminal=true
+Categories=System;
+Keywords=cluster;ai;worker;inference;

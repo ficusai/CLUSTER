@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=AI Cluster (Root)
+GenericName=AI Cluster Root Coordinator
+Comment=Run as root coordinator (llama.cpp RPC)
+Exec=/usr/local/bin/ai-cluster --root --no-ui
+Icon=ai-cluster
+Terminal=true
+Categories=System;
+Keywords=cluster;ai;root;inference;

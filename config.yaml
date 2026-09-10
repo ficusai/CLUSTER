@@ -1,0 +1,47 @@
+# Cluster Configuration — ai-cluster-auto-connect
+#
+# This file is read by cluster.py and bash launchers (legacy/).
+# Paths are relative to this file unless absolute.
+# Leave fields empty to use compiled-in defaults.
+
+cluster:
+  name: "ai-cluster"
+  root_only: false
+  # Set true if this device should never run as a worker (dedicated coordinator).
+
+network:
+  ctrl_port: 52053       # TCP control channel (root + worker)
+  rpc_port: 50052        # llama.cpp RPC
+  udp_discovery_port: 52052
+  mdns_service: "_cluster-worker._tcp.local."
+
+root:
+  http_port: 8080        # OpenAI-compatible API
+
+ai:
+  model: "./legacy/models/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+  threads: 4
+  context_size: 4096
+  n_gpu_layers: 0        # Keep 0 for CPU-only inference
+
+workers:
+  deploy_credentials:
+    linux:
+      user: "ficus-pro"
+      key: "./legacy/android_ssh_key"
+    android:
+      user: "u0_a377"
+      port: 8022
+      key: "./legacy/android_ssh_key"
+    ios:
+      user: "root"
+      port: 22           # Use 2222 if iproxy USB tunnel is active
+      key: "./legacy/android_ssh_key"
+    windows:
+      user: "Administrator"
+      key: null
+
+security:
+  # Bearer token required by POST /api/task/exec.
+  # Override at runtime with: export AI_CLUSTER_API_TOKEN=...
+  api_token: "ai-cluster-token"

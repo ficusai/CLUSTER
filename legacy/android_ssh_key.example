@@ -1,0 +1,5 @@
+# Place your OpenSSH Private Key here as 'android_ssh_key' for legacy Android worker connection over SSH.
+# Example:
+# -----BEGIN OPENSSH PRIVATE KEY-----
+# ...
+# -----END OPENSSH PRIVATE KEY-----
