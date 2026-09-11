@@ -195,9 +195,21 @@ python3 -m py_compile cluster.py src/**/*.py
 ## 🌿 Git & Release Branching
 
 * **Active Release Branch**: `CLUSTER-0.1v-linux-native`
+* **Feature Branch**: `feature/gui-interface`
 * **Remote Origin**: `https://github.com/ficusai/CLUSTER.git`
 
 All commits within this repository maintain strict local directory boundary isolation and follow standardized release branch naming (`<PROJECT>-0.1v-linux-native`).
+
+### Branch-Related File Changes (`feature/gui-interface`)
+* `src/gui/main_window.py`: Modular PySide6 main window with dark slate `#1a1a2e` styling, top control header bar, 7 dynamic tabs, and system tray integration.
+* `src/gui/tabs/__init__.py`: Package initialization for GUI tab viewports.
+* `src/gui/tabs/overview_tab.py`: Overview & Health KPI cards and live service status badges tab.
+* `src/gui/tabs/topology_tab.py`: Node Topology & Worker Grid View viewport tab.
+* `src/gui/tabs/model_tab.py`: GGUF Model Browser & Layer Partition Matrix tab.
+* `src/gui/tabs/playground_tab.py`: Prompt Console & TTFT / t/s Telemetry viewport tab.
+* `src/gui/tabs/deploy_tab.py`: SSH Remote Worker Deployment Wizard viewport tab.
+* `src/gui/tabs/logs_tab.py`: Multi-Log Hub & Level Filters viewport tab.
+* `src/gui/tabs/settings_tab.py`: YAML Config Manager viewport tab.
 
 ---
 
