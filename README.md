@@ -217,6 +217,9 @@ All commits within this repository maintain strict local directory boundary isol
 * `src/root/main.py`: Guard `signal.signal()` against non-main thread crashes when running in GUI mode; falls back to `atexit.register` for cleanup.
 * `src/worker/main.py`: Same guard applied to worker signal handlers to prevent crashes when launched from GUI thread.
 
+### Branch-Related File Changes (`feat/android-connect`)
+* `src/gui/tabs/deploy_tab.py`: Fully populated Android Termux deployment wizard with 7 step-by-step instructions covering package install, bootstrap, IP discovery, rpc-server setup, SSH connectivity, and Termux:Boot auto-start configuration. Includes copy-to-clipboard buttons for each command.
+
 ---
 
 ## 📄 License & Attribution
