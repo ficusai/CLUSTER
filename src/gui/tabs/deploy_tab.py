@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt, QUrl
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QGroupBox,
                                QPushButton, QTextEdit, QFrame, QSizePolicy,
-                               QMessageBox)
+                               QHBoxLayout, QMessageBox)
 from PySide6.QtGui import QFont
 
 
