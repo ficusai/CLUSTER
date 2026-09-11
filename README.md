@@ -201,6 +201,8 @@ python3 -m py_compile cluster.py src/**/*.py
 All commits within this repository maintain strict local directory boundary isolation and follow standardized release branch naming (`<PROJECT>-0.1v-linux-native`).
 
 ### Branch-Related File Changes (`feature/gui-interface`)
+* `AI-Cluster.desktop`: Application desktop entry launcher with `Name=CLUSTER` and desktop actions for GUI, Root, Worker, Stop, and Logs.
+* `launchers/ai-cluster.desktop`: Updated desktop launcher template for Linux environments.
 * `src/gui/main_window.py`: Modular PySide6 main window with dark slate `#1a1a2e` styling, top control header bar, 7 dynamic tabs, and system tray integration.
 * `src/gui/tabs/__init__.py`: Package initialization for GUI tab viewports.
 * `src/gui/tabs/overview_tab.py`: Overview & Health KPI cards and live service status badges tab.
