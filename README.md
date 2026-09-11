@@ -213,6 +213,10 @@ All commits within this repository maintain strict local directory boundary isol
 * `src/gui/tabs/logs_tab.py`: Multi-Log Hub & Level Filters viewport tab.
 * `src/gui/tabs/settings_tab.py`: YAML Config Manager viewport tab.
 
+### Branch-Related File Changes (`feature/fix-signal-thread`)
+* `src/root/main.py`: Guard `signal.signal()` against non-main thread crashes when running in GUI mode; falls back to `atexit.register` for cleanup.
+* `src/worker/main.py`: Same guard applied to worker signal handlers to prevent crashes when launched from GUI thread.
+
 ---
 
 ## 📄 License & Attribution
