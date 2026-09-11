@@ -249,7 +249,7 @@ class LogHub:
             self._original_excepthook(exc_type, exc_value, exc_tb)
 
     def _thread_excepthook(self, args):
-        tb_str = "".join(traceback.format_exception(args.exc_type, args.exc_value, args.exc_tb))
+        tb_str = "".join(traceback.format_exception(args.exc_type, args.exc_value, getattr(args, 'exc_traceback', args.exc_tb)))
         thread_name = args.thread.name if args.thread else "unknown"
         now = datetime.now()
         ts = now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
