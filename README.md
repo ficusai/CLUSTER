@@ -14,6 +14,18 @@ Primary platform: **Linux** for the root coordinator and workers. Heterogeneous 
 
 ---
 
+## Supported Operating Systems
+
+| Operating System | Supported |
+| :--- | :---: |
+| LINUX | ✅ |
+| WINDOWS | ✅ |
+| MACOS | ✅ |
+| ANDROID | ✅ |
+| IOS | ❌ |
+
+---
+
 ## Quick Start
 
 ```bash
