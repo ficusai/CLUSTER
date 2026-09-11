@@ -648,8 +648,12 @@ def main(ui=None, **kwargs):
         worker.stop()
         sys.exit(0)
 
-    signal.signal(signal.SIGINT, handle_sig)
-    signal.signal(signal.SIGTERM, handle_sig)
+    if threading.current_thread() is threading.main_thread():
+        signal.signal(signal.SIGINT, handle_sig)
+        signal.signal(signal.SIGTERM, handle_sig)
+    else:
+        import atexit
+        atexit.register(handle_sig, signal.SIGTERM, None)
 
     worker.run()
 

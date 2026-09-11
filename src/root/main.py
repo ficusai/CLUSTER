@@ -1195,8 +1195,12 @@ def main(ui=None, **kwargs):
         api_token=api_token,
     )
 
-    signal.signal(signal.SIGINT, lambda s, f: root.stop())
-    signal.signal(signal.SIGTERM, lambda s, f: root.stop())
+    if threading.current_thread() is threading.main_thread():
+        signal.signal(signal.SIGINT, lambda s, f: root.stop())
+        signal.signal(signal.SIGTERM, lambda s, f: root.stop())
+    else:
+        import atexit
+        atexit.register(root.stop)
 
     root.run()
 
