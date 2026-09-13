@@ -14,6 +14,7 @@ set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_FILE="${PROJECT_DIR}/config.yaml"
+SSH_STRICT_HOST_KEY="${SSH_STRICT_HOST_KEY:-accept-new}"
 SSH_KEY="${PROJECT_DIR}/legacy/android_ssh_key"
 
 # ── Terminal helpers ──────────────────────────────────────────────────────────
@@ -238,7 +239,7 @@ onboard_android_network() {
 
     # Verify SSH connectivity
     info "Verifying SSH to ${ANDROID_IP}..."
-    if ! ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no -o ConnectTimeout=6 \
+    if ! ssh -i "$SSH_KEY" -o StrictHostKeyChecking=${SSH_STRICT_HOST_KEY} -o ConnectTimeout=6 \
             -p "$ANDROID_SSH_PORT" "$ANDROID_USER_DEFAULT@$ANDROID_IP" "true" 2>/dev/null; then
         err "SSH connection failed. Check IP, sshd status, and keys."
         return 1
@@ -246,7 +247,7 @@ onboard_android_network() {
     info "SSH connection OK."
 
     # Deploy project
-    SSH_BASE="ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -o TCPKeepAlive=yes -p $ANDROID_SSH_PORT $ANDROID_USER_DEFAULT@$ANDROID_IP"
+    SSH_BASE="ssh -i $SSH_KEY -o StrictHostKeyChecking=${SSH_STRICT_HOST_KEY} -o ServerAliveInterval=15 -o TCPKeepAlive=yes -p $ANDROID_SSH_PORT $ANDROID_USER_DEFAULT@$ANDROID_IP"
 
     info "Copying project files to Android..."
     tar -C "$PROJECT_DIR" -cf - \
@@ -308,7 +309,7 @@ onboard_android_usb() {
 
     # Check if sshd is already accessible from via some interface
     ANDROID_IP=$(get_ip_from_adb_shell)
-    if [ -n "$ANDROID_IP" ] && ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no -o ConnectTimeout=4 \
+    if [ -n "$ANDROID_IP" ] && ssh -i "$SSH_KEY" -o StrictHostKeyChecking=${SSH_STRICT_HOST_KEY} -o ConnectTimeout=4 \
             -p "$ANDROID_SSH_PORT" "$ANDROID_USER_DEFAULT@$ANDROID_IP" "true" 2>/dev/null; then
         info "Android SSH already reachable at ${ANDROID_IP}. Switched to network workflow."
         onboard_android_network_preconf "$ANDROID_IP"
@@ -338,14 +339,14 @@ onboard_android_usb() {
 
     info "Attempting SSH at ${ANDROID_IP}..."
     for i in $(seq 1 10); do
-        if ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no -o ConnectTimeout=4 \
+        if ssh -i "$SSH_KEY" -o StrictHostKeyChecking=${SSH_STRICT_HOST_KEY} -o ConnectTimeout=4 \
                 -p "$ANDROID_SSH_PORT" "$ANDROID_USER_DEFAULT@$ANDROID_IP" "true"; then
             break
         fi
         sleep 2
     done
 
-    if ! ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no -o ConnectTimeout=4 \
+    if ! ssh -i "$SSH_KEY" -o StrictHostKeyChecking=${SSH_STRICT_HOST_KEY} -o ConnectTimeout=4 \
             -p "$ANDROID_SSH_PORT" "$ANDROID_USER_DEFAULT@$ANDROID_IP" "true"; then
         err "SSH still not available. Did 'sshd' show 'listening on port 8022' in Termux?"
         return 1
@@ -357,7 +358,7 @@ onboard_android_usb() {
 # Shared SSH-based deployment (used by both USB and Network paths)
 onboard_android_network_preconf() {
     local ip="$1"
-    local SSH_BASE="ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -o TCPKeepAlive=yes -p $ANDROID_SSH_PORT $ANDROID_USER_DEFAULT@$ip"
+    local SSH_BASE="ssh -i $SSH_KEY -o StrictHostKeyChecking=${SSH_STRICT_HOST_KEY} -o ServerAliveInterval=15 -o TCPKeepAlive=yes -p $ANDROID_SSH_PORT $ANDROID_USER_DEFAULT@$ip"
 
     info "Deploying project to ${ip}..."
     tar -C "$PROJECT_DIR" -cf - \

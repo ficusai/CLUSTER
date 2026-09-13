@@ -42,6 +42,7 @@ workers:
       key: null
 
 security:
+  ssh_strict_host_key: accept-new
   # Bearer token required by POST /api/task/exec.
   # Override at runtime with: export AI_CLUSTER_API_TOKEN=...
   api_token: "" # Set via CLUSTER_API_TOKEN env var
