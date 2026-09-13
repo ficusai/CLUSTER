@@ -8,7 +8,7 @@ from common.loghub import LogHub
 from PySide6.QtCore import QTimer, Signal, QObject, Qt
 from PySide6.QtWidgets import QApplication, QMessageBox, QSystemTrayIcon
 
-from .main_window import MainWindow
+from .main_window.main_window import MainWindow
 from .resources import APP_ICON_SVG
 from .system_tray import SystemTray
 
