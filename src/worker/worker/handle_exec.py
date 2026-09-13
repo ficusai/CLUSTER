@@ -1,5 +1,6 @@
 """handle_exec.py — _handle_exec(payload) for ClusterWorker."""
 import shlex
+import shlex
 import subprocess
 from common.loghub import LogHub
 

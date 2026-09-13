@@ -12,6 +12,11 @@ try:
 except ImportError:
     pass
 
+try:
+    from zeroconf._exceptions import NonUniqueNameException
+except ImportError:
+    NonUniqueNameException = Exception
+
 
 class MDNSAdvertiser:
     @LogHub.log_call("DISCOVERY")
@@ -49,6 +54,9 @@ class MDNSAdvertiser:
         )
         try:
             self.zeroconf.register_service(self.info)
+        except NonUniqueNameException:
+            LogHub().warn("DISCOVERY", f"mDNS name collision for {full_name}; advertising skipped")
+            return False
         except Exception as exc:
             LogHub().exception("DISCOVERY", f"register_service failed: {exc}")
             return False

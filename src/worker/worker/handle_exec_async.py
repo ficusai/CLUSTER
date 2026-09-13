@@ -1,4 +1,5 @@
 """handle_exec_async.py — _handle_exec_async(payload) for ClusterWorker."""
+import shlex
 import subprocess
 from common.loghub import LogHub
 
