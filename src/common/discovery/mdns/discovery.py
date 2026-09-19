@@ -5,7 +5,7 @@ from common.protocol import MDNS_SERVICE_TYPE
 
 HAVE_ZEROCONF = False
 try:
-    from zeroconf import ServiceInfo, ServiceBrowser, Zeroconf
+    from zeroconf import ServiceBrowser, Zeroconf
     HAVE_ZEROCONF = True
 except ImportError:
     pass

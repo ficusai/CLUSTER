@@ -1,5 +1,4 @@
 """build_status_dict.py — _build_status_dict() for ClusterRoot."""
-import json
 from common.loghub import LogHub
 
 

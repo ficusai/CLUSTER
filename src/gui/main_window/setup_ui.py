@@ -1,17 +1,10 @@
 """setup_ui.py — _setup_ui() for MainWindow."""
-import time
-from datetime import datetime
-from PySide6.QtCore import Qt, QTimer, Slot, Signal, QObject
-from PySide6.QtGui import QFont, QColor, QPalette, QBrush, QCloseEvent
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget,
-    QTableWidget, QTableWidgetItem, QHeaderView, QLabel, QPushButton,
-    QTextEdit, QGroupBox, QGridLayout, QFrame, QSplitter, QStatusBar,
-    QMessageBox, QApplication, QSystemTrayIcon,
+    QWidget, QVBoxLayout, QHBoxLayout, QTabWidget,
+    QLabel, QPushButton, QFrame, QStatusBar,
 )
 from common.loghub import LogHub
-from ..resources import APP_ICON_SVG, ICON_COLORS
-from ..system_tray import SystemTray, get_tray_icon
+from ..system_tray import get_tray_icon
 from ..tabs.overview_tab import OverviewTab
 from ..tabs.topology_tab import TopologyTab
 from ..tabs.model_tab import ModelTab

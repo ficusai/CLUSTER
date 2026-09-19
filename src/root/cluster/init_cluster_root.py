@@ -2,10 +2,8 @@
 import os
 import socket
 import threading
-import platform as plat
 from common.loghub import LogHub
-from common.protocol import CTRL_PORT_DEFAULT, RPC_PORT_DEFAULT, MDNS_ROOT_SERVICE_TYPE, UDP_DISCOVERY_PORT
-from common.discovery import MDNSDiscovery, UDPBroadcastDiscovery, MDNSRootAdvertiser, _get_local_ip
+from common.protocol import CTRL_PORT_DEFAULT, RPC_PORT_DEFAULT
 from ..registry.worker_registry import WorkerRegistry
 from ..tasks.task_manager import TaskManager
 

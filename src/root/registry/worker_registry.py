@@ -7,13 +7,12 @@ from .get_active import GetActiveMixin
 from .get_all import GetAllMixin
 from .get_worker_count import GetWorkerCountMixin
 from .get_connection import GetConnectionMixin
-from .contains import ContainsMixin
 from .get_info import GetInfoMixin
 from .update_last_seen import UpdateLastSeenMixin
 
 
 class WorkerRegistry(RegisterMixin, UnregisterMixin, GetActiveMixin, GetAllMixin,
-                     GetWorkerCountMixin, GetConnectionMixin, ContainsMixin,
+                     GetWorkerCountMixin, GetConnectionMixin,
                      GetInfoMixin, UpdateLastSeenMixin):
     @LogHub.log_call("ROOT")
     def __init__(self):

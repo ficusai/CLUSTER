@@ -15,7 +15,6 @@ from .exception import ExceptionMixin
 from .global_excepthook import GlobalExceptHookMixin
 from .thread_excepthook import ThreadExceptHookMixin
 from .log_call_decorator import LogCallMixin
-from .notify_orchestrator import NotifyOrchestratorMixin
 from .stop import StopMixin
 
 
@@ -36,7 +35,6 @@ class LogHub(
     GlobalExceptHookMixin,
     ThreadExceptHookMixin,
     LogCallMixin,
-    NotifyOrchestratorMixin,
     StopMixin,
 ):
     pass

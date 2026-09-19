@@ -3,11 +3,10 @@ import socket
 from common.loghub import LogHub
 from ..get_local_ip import _get_local_ip
 from common.protocol import MDNS_SERVICE_TYPE
-from common.loghub import LogHub as _LH
 
 HAVE_ZEROCONF = False
 try:
-    from zeroconf import ServiceInfo, ServiceBrowser, Zeroconf
+    from zeroconf import ServiceInfo, Zeroconf
     HAVE_ZEROCONF = True
 except ImportError:
     pass

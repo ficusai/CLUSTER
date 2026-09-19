@@ -1,6 +1,5 @@
 """sse_broadcast.py — _sse_broadcast(event, data) for ClusterRoot."""
 import json
-import threading
 from common.loghub import LogHub
 
 

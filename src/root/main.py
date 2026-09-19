@@ -3,7 +3,6 @@ import argparse
 import signal
 import sys
 import threading
-import time
 
 sys.path.insert(0, __import__("os").path.join(__import__("os").path.dirname(__file__), ".."))
 

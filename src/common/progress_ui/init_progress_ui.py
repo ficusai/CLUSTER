@@ -1,9 +1,6 @@
 """init_progress_ui.py — __init__ for ProgressUI."""
 import threading
 import time
-from datetime import datetime
-from .constants import STATUS_ICONS, _COLORS_SERVICES as COLORS_SERVICES
-from .notifier import send_notification
 
 
 class InitProgressUIMixin:
