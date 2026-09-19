@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_FILE="${APP_DIR}/.run.log"
-PID_FILE="${APP_DIR}/.run.pid"
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LOG_FILE="${APP_DIR}/runtime/.run.log"
+PID_FILE="${APP_DIR}/runtime/.run.pid"
 
 mkdir -p "$(dirname "${LOG_FILE}")" 2>/dev/null || true
 export CLUSTER_LAUNCH_START="$(date '+%Y-%m-%d %H:%M:%S')"
@@ -120,9 +120,9 @@ stop_pattern() {
   fi
 }
 
-stop_pattern "${APP_DIR}/cluster-supervisor.sh" "cluster supervisor"
-stop_pattern "${APP_DIR}/quick-start-cluster.sh" "quick-start launcher"
-stop_pattern "${APP_DIR}/ai-cluster-events.sh" "events window"
+stop_pattern "${APP_DIR}/legacy/cluster-supervisor.sh" "cluster supervisor"
+stop_pattern "${APP_DIR}/scripts/quick-start-cluster.sh" "quick-start launcher"
+stop_pattern "${APP_DIR}/scripts/ai-cluster-events.sh" "events window"
 stop_pattern "${APP_DIR}/.*llama-server" "llama server"
 stop_pattern "${APP_DIR}/.*rpc-server" "rpc server"
 stop_pattern "${APP_DIR}/dist/cluster-linux-x86_64" "cluster binary (linux)"

@@ -3,7 +3,7 @@
 # Installs to ~/.local/ for desktop integration without root.
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PREFIX="${PREFIX:-${HOME}/.local}"
 BIN_DIR="${BIN_DIR:-${PREFIX}/bin}"
 BIN_NAME="ai-cluster"

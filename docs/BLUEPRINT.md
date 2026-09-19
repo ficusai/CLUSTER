@@ -2,6 +2,8 @@
 
 > **How to use:** Humans edit this file to plan refactors; agents use the `ACA-*` codes to locate exact functions/classes in the source. Blueprint mirrors source structure 1:1. Do not edit code files during documentation passes.
 
+> **Layout note (2026-09-19):** Operational shell/Python helpers (`launcher.sh`, `ai-cluster-*.sh`, installers, `notify-action.py`) moved to `scripts/`. PyInstaller `.spec` files moved to `build/`. Guides, audits and reports moved to `docs/`. GGUF models → `models/`, llama.cpp binaries → `bin/`, SSH keys → `security/keys/`, PID/lock state → `runtime/`. File locations in the inventory below remain the original root-level paths; prepend the folder above when resolving.
+
 ---
 
 ## File Inventory
@@ -511,7 +513,7 @@
 | `network.rpc_port` | `50052` | llama.cpp RPC backend port |
 | `network.udp_discovery_port` | `52052` | UDP discovery broadcast port |
 | `root.http_port` | `8080` | Root HTTP API + dashboard port |
-| `ai.model` | path under `legacy/models/` | Default GGUF model |
+| `ai.model` | path under `models/` | Default GGUF model |
 | `ai.threads` | `4` | Default CPU threads for llama-server |
 | `ai.context_size` | `4096` | Model context size |
 | `ai.n_gpu_layers` | `0` | GPU layers (keep 0 for CPU-only) |

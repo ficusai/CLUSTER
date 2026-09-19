@@ -52,6 +52,6 @@ SOURCES
 
 RENAME FILE
 -----------
-Place GGUF as /legacy/models/<name>-q4_k_m.gguf.
+Place GGUF as /models/<name>-q4_k_m.gguf.
 Edit config.yaml -> ai.model to point to it.
 Restart root: close & re-run the AI Cluster desktop action.

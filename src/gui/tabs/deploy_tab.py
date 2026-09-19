@@ -38,7 +38,7 @@ class DeployTab(QWidget):
         self._step("3 — Bootstrap the Cluster Worker",
             "Download and run the bootstrap script inside Termux. This sets up the SSH daemon and worker directory:",
             [
-                "wget -O setup-termux.sh https://raw.githubusercontent.com/ficusai/CLUSTER/main/setup-termux.sh",
+                "wget -O setup-termux.sh https://raw.githubusercontent.com/ficusai/CLUSTER/main/scripts/setup-termux.sh",
                 "bash setup-termux.sh",
             ],
             note="The script starts sshd on port 8022 and creates ~/.termux/boot/ for auto-start on boot.")

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_DIR="${APP_DIR}/logs"
-PID_FILE="${APP_DIR}/.run.pid"
-mkdir -p "${LOG_DIR}"
+PID_FILE="${APP_DIR}/runtime/.run.pid"
+mkdir -p "${LOG_DIR}" "${APP_DIR}/runtime"
 
 SESSION_LOG="${LOG_DIR}/session-$(date '+%Y-%m-%d-%H-%M-%S').log"
 BASH_LOG="${LOG_DIR}/events.log"
@@ -68,11 +68,11 @@ resolve_running_pid() {
     # Order matters: most-specific wrappers first so desktop/launcher PIDs
     # are preferred over raw process-name matches.
     for pattern in \
-        "${APP_DIR}/cluster-supervisor.sh" \
-        "${APP_DIR}/ai-cluster-desktop-root.sh" \
+        "${APP_DIR}/legacy/cluster-supervisor.sh" \
+        "${APP_DIR}/scripts/ai-cluster-desktop-root.sh" \
         "${APP_DIR}/dist/cluster-.* --root" \
         "python3 .*cluster\.py --root" \
-        "${APP_DIR}/quick-start-cluster.sh"
+        "${APP_DIR}/scripts/quick-start-cluster.sh"
     do
         if pgrep -f "${pattern}" >/dev/null 2>&1; then
             pgrep -f "${pattern}" | head -n1 || true

@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE = Path(os.path.dirname(os.path.abspath(__file__)))
+BASE = Path(os.path.dirname(os.path.abspath(__file__))).parent
 
 report = []
 report.append("=== AI Cluster Error-Handling Robustness Report ===\n")

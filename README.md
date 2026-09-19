@@ -82,86 +82,32 @@ Whether running on Linux distributions (Fedora, Debian, Ubuntu, Arch), macOS, Wi
 ```
 CLUSTER/
 ├── cluster.py                          # Top-level entry point (shim → src/cli/main.py)
-├── launcher.sh                         # Portable bash wrapper for .desktop and systemd launchers
-├── ai-cluster-desktop-root.sh          # Desktop entry wrapper script
-├── ai-cluster-stop.sh                  # Cluster process shutdown utility
-├── ai-cluster-logs.sh                  # Live log tail viewer
-├── ai-cluster-web.sh                   # Web dashboard launch helper
-├── cluster-dashboard.py                # Standalone Rich TUI dashboard
 ├── config.yaml                         # Configuration for ports, model paths, heartbeats, and SSH keys
 ├── requirements.txt                    # Python dependencies (PySide6, zeroconf, psutil, rich, pyyaml)
 ├── Makefile                            # Target build & install shortcuts
-├── setup-termux.sh                     # Android Termux bootstrap installer
 ├── src/                                # Python application source code
 │   ├── cli/                            # Command-line launcher (one function per file)
-│   │   ├── main.py                     # Entry point: argument parsing and mode dispatch
-│   │   ├── load_config.py              # Config file loader
-│   │   ├── print_banner.py             # ASCII banner printer
-│   │   ├── choose_mode_interactive.py  # Interactive root/worker selector
-│   │   ├── discover_roots_ui.py        # Network root discovery UI
-│   │   ├── _make_extra_args.py         # Merge CLI args + config + extras
-│   │   ├── run_as_root.py              # Run ClusterRoot coordinator
-│   │   ├── run_as_worker.py            # Run ClusterWorker node
-│   │   ├── _launch_gui.py              # PySide6 GUI launcher
-│   │   ├── _launch_terminal.py         # Terminal UI launcher
-│   │   └── check_dependencies.py       # Optional dependency checker
 │   ├── root/                           # Cluster coordinator (root node)
-│   │   ├── main.py                     # Entry point shim (thin, <60 lines)
-│   │   ├── registry/                   # WorkerRegistry + per-method mixins
-│   │   ├── tasks/                      # TaskManager + per-method mixins
-│   │   ├── cluster/                    # ClusterRoot + per-method mixins
-│   │   ├── http/                       # HTTP API handler (APIHandler)
-│   │   ├── detection/                  # detect_cpu_cores, detect_ram, find_bin_dir, …
-│   │   ├── ollama/                     # ollama_get, ollama_available, get_ollama_models, …
-│   │   └── utils/                      # build_status_dict, sse_broadcast, kill_process_tree, …
 │   ├── worker/                         # Worker node (helper/peer)
-│   │   ├── main.py                     # Entry point shim (thin, <60 lines)
-│   │   ├── worker/                     # ClusterWorker + per-method mixins
-│   │   ├── detection/                  # detect_platform, detect_cpu_cores, detect_ram, …
-│   │   └── config/                     # load_ai_config, find_model
-│   ├── common/                         # Shared infrastructure
-│   │   ├── protocol.py                 # Wire protocol (ControlProtocol, message types)
-│   │   ├── progress_ui.py              # Backward-compat shim → progress_ui/ package
-│   │   ├── progress_ui/                # ProgressUI + send_notification
-│   │   │   ├── __init__.py
-│   │   │   ├── progress_ui.py          # Composed ProgressUI class
-│   │   │   ├── notifier.py             # Cross-platform send_notification
-│   │   │   ├── lifecycle.py            # start / stop / _refresh_loop
-│   │   │   ├── state.py                # set_service, add_event, update_worker, …
-│   │   │   ├── render.py               # Rich UI rendering (_render)
-│   │   │   ├── init_progress_ui.py     # __init__ logic
-│   │   │   └── constants.py            # STATUS_ICONS, _COLORS_SERVICES
-│   │   ├── loghub.py                   # Backward-compat shim → loghub/ package
-│   │   ├── loghub/                     # LogHub + LogWriter
-│   │   │   ├── __init__.py
-│   │   │   ├── loghub.py               # Composed LogHub class
-│   │   │   ├── log_writer.py           # LogWriter class
-│   │   │   ├── log_call_decorator.py   # @LogHub.log_call decorator
-│   │   │   ├── init_loghub.py          # __new__ / __init__ logic
-│   │   │   ├── info.py / warn.py / error.py / exception.py
-│   │   │   ├── rotate.py / find_caller.py / write_entry.py
-│   │   │   ├── capture_write.py / capture_flush.py
-│   │   │   ├── global_excepthook.py / thread_excepthook.py
-│   │   │   ├── notify_orchestrator.py / stop.py
-│   │   │   └── write_to_real_stdout.py / write_to_real_stderr.py
-│   │   ├── discovery.py                # Backward-compat shim → discovery/ package
-│   │   ├── discovery/                  # mDNS + UDP network discovery
-│   │   │   ├── __init__.py
-│   │   │   ├── get_local_ip.py         # _get_local_ip()
-│   │   │   ├── discover_roots_on_network.py
-│   │   │   ├── mdns/                   # MDNSAdvertiser, MDNSDiscovery, MDNSRootAdvertiser
-│   │   │   └── udp/                    # UDPBroadcastDiscovery
-│   └── gui/                            # PySide6 desktop UI
-│       ├── app.py                      # run_gui() — starts QApplication + bridge
-│       ├── main_window.py              # Backward-compat shim → main_window/ package
-│       ├── main_window/                # MainWindow + per-method mixins
-│       ├── system_tray.py              # System tray icon and menu
-│       ├── resources.py                # SVG assets and color constants
-│       └── tabs/                       # Tab pages (overview, topology, model, …)
+│   ├── common/                         # Shared infrastructure (protocol, loghub, discovery, progress UI)
+│   └── gui/                            # PySide6 desktop UI + tabs
+├── scripts/                            # Operational shell/Python helpers (launcher, installers, utils)
 ├── dashboard/                          # Web dashboard HTML/JS build files
-├── linux/                              # Desktop entries (.desktop) & systemd user service units
 ├── deploy/                             # Remote worker SSH deployment scripts
-├── build/                              # PyInstaller build specification scripts
+├── build/                              # PyInstaller build scripts + .spec files
+├── dist/                               # PyInstaller build output
+├── models/                             # GGUF model weights (gitignored)
+├── bin/                                # llama.cpp binaries (llama-server, rpc-server)
+├── security/keys/                      # SSH keys for remote worker deploy (gitignored)
+├── runtime/                            # PID/lock/state files written by launcher scripts (gitignored)
+├── linux/                              # Desktop entries (.desktop) & systemd user service units
+├── launchers/                          # User-facing .desktop launchers
+├── macos/  windows/                    # Platform-specific connect helpers
+├── assets/                             # Icons and static resources
+├── docs/                               # Project documentation (guides, audits, reports)
+├── legacy/                             # [Gen 1] Bash implementation (setup, SSH helpers)
+├── logs/                               # Runtime log output (gitignored)
+├── DEAD-CODE/                          # Archived/retired code (kept locally only)
 └── tests/                              # PyTest automated unit test suite
 ```
 
@@ -192,7 +138,7 @@ pip install -r requirements.txt
 # Installs executable to ~/.local/bin and desktop shortcut to ~/.local/share/applications
 make install-local
 # or
-./install-local.sh
+./scripts/install-local.sh
 ```
 
 ---
@@ -233,7 +179,7 @@ Cleanly shut down all active root, worker, and llama.cpp processes:
 ```bash
 python3 cluster.py stop
 # or
-./ai-cluster-stop.sh
+./scripts/ai-cluster-stop.sh
 ```
 
 ---
@@ -247,7 +193,7 @@ Run the automated test suite to verify network protocols, discovery mechanisms, 
 pytest tests/
 
 # Execute system robustness verification
-python3 verify_ai_cluster_robustness.py
+python3 scripts/verify_ai_cluster_robustness.py
 
 # Verify Python syntax across all modules
 python3 -m py_compile cluster.py src/**/*.py
@@ -264,8 +210,7 @@ python3 -m py_compile cluster.py src/**/*.py
 All commits within this repository maintain strict local directory boundary isolation and follow standardized release branch naming (`<PROJECT>-0.1v-linux-native`).
 
 ### Branch-Related File Changes (`feature/gui-interface`)
-* `AI-Cluster.desktop`: Application desktop entry launcher with `Name=CLUSTER` and desktop actions for GUI, Root, Worker, Stop, and Logs.
-* `launchers/ai-cluster.desktop`: Updated desktop launcher template for Linux environments.
+* `launchers/ai-cluster.desktop`: Application desktop entry launcher with `Name=CLUSTER` and desktop actions for GUI, Root, Worker, Stop, and Logs.
 * `src/gui/main_window.py`: Modular PySide6 main window with dark slate `#1a1a2e` styling, top control header bar, 7 dynamic tabs, and system tray integration.
 * `src/gui/tabs/__init__.py`: Package initialization for GUI tab viewports.
 * `src/gui/tabs/overview_tab.py`: Overview & Health KPI cards and live service status badges tab.

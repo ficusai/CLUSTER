@@ -8,7 +8,7 @@ ANDROID_USER="${ANDROID_USER:-u0_a377}"
 ANDROID_IP="${ANDROID_IP:-192.168.1.100}"
 
 SSH_OPTS=(
-    -i "$(dirname "$0")/android_ssh_key"
+    -i "$(cd "$(dirname "$0")/.." && pwd)/security/keys/android_ssh_key"
     -o StrictHostKeyChecking=no
     -o UserKnownHostsFile=/dev/null
     -o ServerAliveInterval=15

@@ -4,11 +4,11 @@
 # with Terminal=true opens exactly one window.
 set -euo pipefail
 
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_DIR="${PROJECT_DIR}/logs"
-mkdir -p "${LOG_DIR}" 2>/dev/null || true
+mkdir -p "${LOG_DIR}" "${PROJECT_DIR}/runtime" 2>/dev/null || true
 LOG_FILE="${LOG_DIR}/desktop-root.log"
-LOCK_FILE="${LOG_DIR}/desktop-root.lock"
+LOCK_FILE="${PROJECT_DIR}/runtime/desktop-root.lock"
 
 log() {
     local ts
@@ -40,7 +40,7 @@ stop_stale() {
     local pids
     pids=$(pgrep -f "python3 .*cluster\.py --root" 2>/dev/null || true)
     pids="${pids}$(pgrep -f "${PROJECT_DIR}/dist/cluster-.* --root" 2>/dev/null || true)"
-    pids="${pids}$(pgrep -f "${PROJECT_DIR}/ai-cluster-desktop-root.sh" 2>/dev/null || true)"
+    pids="${pids}$(pgrep -f "${PROJECT_DIR}/scripts/ai-cluster-desktop-root.sh" 2>/dev/null || true)"
     # Exclude this wrapper's own PID and its parent so stop_stale does not
     # kill the currently-running launcher before exec python3.
     pids=$(printf '%s\n' "${pids}" | grep -vE "^${my_pid}$|^${my_ppid}$" || true)
@@ -57,7 +57,7 @@ stop_stale() {
     fi
     # Also kill any stranded auto-onboard / deploy children from prior runs.
     for label in \
-        "${PROJECT_DIR}/ai-cluster-auto-onboard.sh" \
+        "${PROJECT_DIR}/scripts/ai-cluster-auto-onboard.sh" \
         "ssh -i .*android_ssh_key" \
         "tar -C .*ai-cluster.* -xf" \
         "timeout .*ssh .*ai-cluster" \
@@ -97,7 +97,7 @@ open_dashboard() {
 stop_stale
 log "Starting AI Cluster root coordinator..."
 (sleep 3 && open_dashboard) >/dev/null 2>&1 &
-(sleep 6 && "${PROJECT_DIR}/ai-cluster-auto-onboard.sh" >> "${LOG_DIR}/desktop-root.log" 2>&1) >/dev/null 2>&1 &
+(sleep 6 && "${PROJECT_DIR}/scripts/ai-cluster-auto-onboard.sh" >> "${LOG_DIR}/desktop-root.log" 2>&1) >/dev/null 2>&1 &
 
 cd "${PROJECT_DIR}"
 exec python3 "${PROJECT_DIR}/cluster.py" --root --no-ui

@@ -19,7 +19,7 @@ root:
   http_port: 8080        # OpenAI-compatible API
 
 ai:
-  model: "./legacy/models/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+  model: "./models/qwen2.5-1.5b-instruct-q4_k_m.gguf"
   threads: 4
   context_size: 4096
   n_gpu_layers: 0        # Keep 0 for CPU-only inference
@@ -28,15 +28,15 @@ workers:
   deploy_credentials:
     linux:
       user: "ficus-pro"
-      key: "./legacy/android_ssh_key"
+      key: "./security/keys/android_ssh_key"
     android:
       user: "u0_a377"
       port: 8022
-      key: "./legacy/android_ssh_key"
+      key: "./security/keys/android_ssh_key"
     ios:
       user: "root"
       port: 22           # Use 2222 if iproxy USB tunnel is active
-      key: "./legacy/android_ssh_key"
+      key: "./security/keys/android_ssh_key"
     windows:
       user: "Administrator"
       key: null

@@ -138,26 +138,24 @@ curl http://localhost:8083/api/status
 ```text
 ai-cluster-auto-connect/
 ├── cluster.py                    # UNIFIED ENTRY POINT
-├── launcher.sh                   # Bash wrapper for .desktop / systemd
-├── launcher-notify.sh            # Desktop notification helper
-├── notify-action.py              # Notification action dispatcher
-├── cluster-dashboard.py          # Rich TUI dashboard
 ├── config.yaml                   # Cluster configuration
 ├── requirements.txt              # Dependencies
 ├── Makefile                      # install / uninstall / test / build / clean
 ├── README.md                     # Project overview
-├── AGENTS.md                     # AI agent project context
-├── BLUEPRINT.md                  # Editable project map
-├── INSTALLATION.md               # Deployment guide
-├── ARCHITECTURE.md               # Design and ports
-├── IMPLEMENTATION-PLAN.md        # This file
-├── OPS.md                        # Internal runbook
-├── quick-start-cluster.sh        # Bash quick-start launcher
-├── ai-cluster-run.sh             # Runtime wrapper
-├── ai-cluster-stop.sh            # Stop script
-├── ai-cluster-events.sh          # Live log window helper
-├── ai-cluster-web.sh             # Web dashboard helper
-├── setup-termux.sh               # Termux bootstrap
+├── scripts/                      # Shell/Python helpers:
+│   ├── launcher.sh               # Bash wrapper for .desktop / systemd
+│   ├── quick-start-cluster.sh    # Bash quick-start launcher
+│   ├── ai-cluster-run.sh         # Runtime wrapper
+│   ├── ai-cluster-stop.sh        # Stop script
+│   ├── ai-cluster-events.sh      # Live log window helper
+│   ├── ai-cluster-web.sh         # Web dashboard helper
+│   ├── setup-termux.sh           # Termux bootstrap
+│   ├── install.sh                # System-wide installer
+│   ├── install-local.sh          # Per-user installer
+│   └── notify-action.py          # Notification action dispatcher
+├── docs/                         # Guides (ARCHITECTURE, BLUEPRINT, OPS, ...)
+├── models/                       # GGUF model weights
+├── bin/                          # llama.cpp binaries
 ├── src/
 │   ├── common/
 │   │   ├── protocol.py           # JSON-line protocol over TCP

@@ -12,10 +12,9 @@
 # =============================================================================
 set -euo pipefail
 
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CONFIG_FILE="${PROJECT_DIR}/config.yaml"
-SSH_STRICT_HOST_KEY="${SSH_STRICT_HOST_KEY:-accept-new}"
-SSH_KEY="${PROJECT_DIR}/legacy/android_ssh_key"
+SSH_KEY="${PROJECT_DIR}/security/keys/android_ssh_key"
 
 # ── Terminal helpers ──────────────────────────────────────────────────────────
 if [ -t 1 ]; then
@@ -274,7 +273,7 @@ onboard_android_network() {
     blue "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     blue "  Android worker started!"
     blue "  Device:  ${ANDROID_IP}"
-    blue "  Logs:    ai-cluster-auto-connect/legacy/android-log-${ANDROID_IP}.log"
+    blue "  Logs:    ai-cluster-auto-connect/logs/android-log-${ANDROID_IP}.log"
     blue "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
 
@@ -305,7 +304,7 @@ onboard_android_usb() {
 
     # Push setup helper
     info "Pushing setup script to shared storage..."
-    adb push "$PROJECT_DIR/setup-termux.sh" /sdcard/Download/ai-cluster-setup.sh
+    adb push "$PROJECT_DIR/scripts/setup-termux.sh" /sdcard/Download/ai-cluster-setup.sh
 
     # Check if sshd is already accessible from via some interface
     ANDROID_IP=$(get_ip_from_adb_shell)

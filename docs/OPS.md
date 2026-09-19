@@ -18,8 +18,8 @@
 - **Worker 3 (Android/Termux):** `<WORKER3_IP>`:8022 | User: `u0_a377` | Key: `<KEY_NAME>`
 
 ### Storage
-- Models: `./legacy/models/*.gguf`
-- Binaries: `./legacy/bin/`
+- Models: `./models/*.gguf`
+- Binaries: `./bin/`
 - Logs: `./logs/`
 
 ---
@@ -28,7 +28,7 @@
 
 ```bash
 # Terminal mode
-./ai-cluster-events.sh
+./scripts/ai-cluster-events.sh
 
 # Or direct
 python3 cluster.py root
@@ -39,16 +39,16 @@ python3 cluster.py worker
 # Stop
 python3 cluster.py stop
 # or
-./ai-cluster-stop.sh
+./scripts/ai-cluster-stop.sh
 ```
 
 The Desktop launcher (`~/Desktop/ai-cluster.desktop`) runs:
 
 ```bash
-./launcher-notify.sh --root
+./scripts/launcher.sh --root
 ```
 
-This shows a notification with **Stop / Restart / Logs** actions handled by `notify-action.py`.
+This shows a notification with **Stop / Restart / Logs** actions handled by `scripts/notify-action.py`.
 
 ---
 

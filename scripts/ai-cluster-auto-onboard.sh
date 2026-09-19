@@ -7,13 +7,13 @@
 # =============================================================================
 set -euo pipefail
 
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_DIR="${PROJECT_DIR}/logs"
 mkdir -p "${LOG_DIR}" 2>/dev/null || true
 LOG_FILE="${LOG_DIR}/auto-onboard.log"
 
 # Config
-SSH_KEY="${PROJECT_DIR}/legacy/android_ssh_key"
+SSH_KEY="${PROJECT_DIR}/security/keys/android_ssh_key"
 ANDROID_SSH_PORT=8022
 LINUX_SSH_PORT=22
 CONNECT_TIMEOUT=5

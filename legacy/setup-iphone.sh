@@ -69,7 +69,7 @@ echo "[iPhone] Compiling..."
 make -j$(sysctl -n hw.ncpu 2>/dev/null || echo 2) rpc-server 2>&1
 
 echo "[iPhone] Build complete!"
-cp bin/rpc-server "${IPHONE_DIR}/rpc-server"
+cp ../bin/rpc-server "${IPHONE_DIR}/rpc-server"
 ls -lh "${IPHONE_DIR}/rpc-server"
 
 # 4. Verify the binary works

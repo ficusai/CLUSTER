@@ -14,7 +14,7 @@ class HandleStartRpcMixin:
         rpc_bin = None
         search_paths = [
             payload.get("rpc_bin"),
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "legacy", "bin", "rpc-server"),
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "bin", "rpc-server"),
             os.path.expanduser("~/ai-cluster/bin/rpc-server"),
             os.path.expanduser("~/ai-cluster/rpc-server"),
             "./rpc-server",

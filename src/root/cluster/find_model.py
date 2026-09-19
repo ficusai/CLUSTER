@@ -8,8 +8,7 @@ class FindModelMixin:
     def _find_model(self):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         search_paths = [
-            os.path.join(script_dir, "..", "..", "legacy", "models"),
-            "./legacy/models",
+            os.path.join(script_dir, "..", "..", "models"),
             "./models",
         ]
         for sp in search_paths:

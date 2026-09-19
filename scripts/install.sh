@@ -3,7 +3,7 @@
 # Installs systemd services, desktop entries, and the cluster binary.
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PREFIX="${PREFIX:-/usr/local}"
 BIN_DIR="${BIN_DIR:-${PREFIX}/bin}"
 BIN_NAME="ai-cluster"

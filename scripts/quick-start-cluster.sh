@@ -2,11 +2,11 @@
 # Quick-start the AI cluster auto-connect system
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PLATFORM="$(uname -s | tr '[:upper:]' '[:lower:]')"
 ARCH="$(uname -m)"
 CLUSTER_BIN=""
-LOG_FILE="${SCRIPT_DIR}/.run.log"
+LOG_FILE="${SCRIPT_DIR}/runtime/.run.log"
 
 mkdir -p "$(dirname "${LOG_FILE}")" 2>/dev/null || true
 

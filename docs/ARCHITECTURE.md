@@ -15,47 +15,29 @@ Two generations coexist:
 ```
 ai-cluster-auto-connect/
 ├── cluster.py                  # [ENTRY POINT] Unified Python CLI
-├── launcher.sh                 # Bash wrapper used by .desktop files and systemd
-├── launcher-notify.sh          # Desktop notification helper for root mode
-├── notify-action.py            # Routes notification action buttons to cluster.py
-├── cluster-dashboard.py        # Standalone Rich TUI dashboard
-├── config.yaml                 # Cluster config (ports, model path, credentials)
+├── config.yaml                 # Runtime config (ports, model path, credentials)
 ├── requirements.txt            # Python dependencies
 ├── Makefile                    # install / uninstall / test / build / clean
 ├── README.md                   # Project overview
-├── AGENTS.md                   # AI agent project context
-├── BLUEPRINT.md                # Editable project map (ACA-* codes)
-├── INSTALLATION.md             # Deployment guide
-├── IMPLEMENTATION-PLAN.md      # Feature status and roadmap
-├── OPS.md                      # Internal runbook
-├── quick-start-cluster.sh      # Bash menu launcher
-├── ai-cluster-run.sh           # Runtime wrapper
-├── ai-cluster-stop.sh          # Graceful shutdown helper
-├── ai-cluster-events.sh        # Live log window helper
-├── ai-cluster-web.sh           # Web dashboard helper
-├── setup-termux.sh             # Termux bootstrap for Android
+├── scripts/                    # Operational shell/Python helpers (launcher, ai-cluster-*, installers)
 ├── src/                        # [GEN 2] Python source
-│   ├── common/
-│   │   ├── protocol.py         # TCP JSON-line protocol + constants
-│   │   ├── discovery.py        # mDNS + UDP broadcast discovery
-│   │   ├── loghub.py           # Centralized logging with stdout capture
-│   │   └── progress_ui.py      # Rich terminal dashboard + notifications
-│   ├── root/
-│   │   └── main.py             # Root coordinator
-│   ├── worker/
-│   │   └── main.py             # Auto-connect worker
-│   └── gui/
-│       ├── app.py              # GUI bridge
-│       ├── main_window.py      # Main PySide6 window
-│       ├── system_tray.py      # Tray icon with status badge
-│       └── resources.py        # Compiled icon resources
-├── build/                      # PyInstaller build scripts
-├── deploy/
-├── linux/                      # systemd services + desktop entry templates
-├── macos/                      # macOS helper placeholder
-├── windows/                    # Windows helper placeholder
+│   ├── common/                 # protocol.py, discovery/, loghub/, progress_ui/
+│   ├── root/                   # Root coordinator
+│   ├── worker/                 # Auto-connect worker
+│   └── gui/                    # PySide6 desktop UI
+├── build/                      # PyInstaller build scripts + .spec files
+├── dist/                       # Build output
+├── deploy/                     # Remote worker SSH deployment
+├── models/                     # GGUF model weights (gitignored)
+├── bin/                        # llama.cpp binaries (llama-server, rpc-server)
+├── security/keys/              # SSH keys for remote deploy (gitignored)
+├── runtime/                    # PID/lock/state files (gitignored)
+├── launchers/                  # User-facing .desktop launchers
+├── linux/  macos/  windows/    # Platform helpers + systemd templates
+├── docs/                       # Guides, audits, reports
+├── logs/                       # Runtime log output (gitignored)
 ├── tests/                      # pytest suite
-├── legacy/                     # [GEN 1] Bash / binaries / model files
+├── legacy/                     # [GEN 1] Bash / SSH helpers / setup scripts
 └── dashboard/build/index.html  # Static HTML dashboard
 ```
 
@@ -178,7 +160,7 @@ Client ──▶ root:8080/v1/chat/completions
 ## Build & Deploy
 
 - From source: `python3 cluster.py root` / `python3 cluster.py worker` / `python3 cluster.py gui`
-- Bash wrapper: `./launcher.sh root`
+- Bash wrapper: `./scripts/launcher.sh root`
 - Single binary: `make build` → `dist/cluster-linux-x86_64`
 - Cross-platform: `./build/build-all.sh` (linux x86_64/ARM64, macOS x86_64/ARM64, Windows x86_64)
 - Deploy worker: `python3 cluster.py deploy user@host` or `deploy/deploy-worker.sh`

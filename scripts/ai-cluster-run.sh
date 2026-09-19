@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_FILE="${APP_DIR}/.run.log"
-PID_FILE="${APP_DIR}/.run.pid"
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LOG_FILE="${APP_DIR}/runtime/.run.log"
+PID_FILE="${APP_DIR}/runtime/.run.pid"
 APP_PID_FILE="${PID_FILE}"
 
 mkdir -p "$(dirname "${LOG_FILE}")" 2>/dev/null || true
@@ -59,13 +59,13 @@ is_running() {
             return 0
         fi
     fi
-    if pgrep -f "${APP_DIR}/cluster-supervisor.sh" >/dev/null 2>&1; then
+    if pgrep -f "${APP_DIR}/legacy/cluster-supervisor.sh" >/dev/null 2>&1; then
         return 0
     fi
-    if pgrep -f "${APP_DIR}/ai-cluster-desktop-root.sh" >/dev/null 2>&1; then
+    if pgrep -f "${APP_DIR}/scripts/ai-cluster-desktop-root.sh" >/dev/null 2>&1; then
         return 0
     fi
-    if pgrep -f "${APP_DIR}/quick-start-cluster.sh" >/dev/null 2>&1; then
+    if pgrep -f "${APP_DIR}/scripts/quick-start-cluster.sh" >/dev/null 2>&1; then
         return 0
     fi
     if pgrep -f "python3 .*cluster\.py --root" >/dev/null 2>&1; then
@@ -76,7 +76,7 @@ is_running() {
 
 if is_running; then
     log_failed "cluster is already running"
-    echo "cluster is already running. Stop it first with: ${APP_DIR}/ai-cluster-stop.sh"
+    echo "cluster is already running. Stop it first with: ${APP_DIR}/scripts/ai-cluster-stop.sh"
     send_notify "AI Cluster" "Launch failed: already running"
     read -p "Press Enter to close..." _ || true
     exit 1
@@ -88,9 +88,9 @@ echo $$ > "${PID_FILE}"
 log_success "Reserved PID file ${PID_FILE}"
 
 log "Starting cluster (src=${APP_DIR})..."
-log "  Kill switch: ${APP_DIR}/ai-cluster-stop.sh"
+log "  Kill switch: ${APP_DIR}/scripts/ai-cluster-stop.sh"
 
-log "Exec: ${APP_DIR}/quick-start-cluster.sh"
+log "Exec: ${APP_DIR}/scripts/quick-start-cluster.sh"
 
 cleanup() {
     log "Shell exiting; cleaning up."
@@ -105,7 +105,7 @@ cleanup() {
 }
 trap cleanup EXIT HUP TERM INT
 
-if "${APP_DIR}/quick-start-cluster.sh"; then
+if "${APP_DIR}/scripts/quick-start-cluster.sh"; then
     log_success "quick-start-cluster.sh completed"
 else
     rc=$?

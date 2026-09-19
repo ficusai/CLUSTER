@@ -17,7 +17,7 @@ For `cluster.py gui`, `PySide6` is required. Without it, the application falls b
 ## Linux (system-wide)
 
 ```bash
-sudo ./install.sh
+sudo ./scripts/install.sh
 ```
 
 This installs:
@@ -45,7 +45,7 @@ sudo journalctl -u ai-cluster-root.service -f
 ## Linux (user-only, no sudo)
 
 ```bash
-./install-local.sh
+./scripts/install-local.sh
 ```
 
 This installs user-level systemd units under `~/.config/systemd/user/` and desktop entries under `~/.local/share/applications/`. It also copies `linux/ai-cluster-root.desktop` to `~/Desktop/` as `ai-cluster.desktop`.
@@ -108,7 +108,7 @@ For deployment, build with PyInstaller and publish to a shared folder. Automated
 2. Run the bootstrap on the device:
 
 ```bash
-bash setup-termux.sh
+bash scripts/setup-termux.sh
 ```
 
 3. From the Fedora host, deploy or connect via SSH (port `8022` by default).

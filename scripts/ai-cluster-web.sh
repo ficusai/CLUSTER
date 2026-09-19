@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_FILE="${APP_DIR}/.run.log"
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LOG_FILE="${APP_DIR}/runtime/.run.log"
 
 mkdir -p "$(dirname "${LOG_FILE}")" 2>/dev/null || true
 

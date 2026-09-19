@@ -8,8 +8,7 @@ class FindBinDirMixin:
     def _find_bin_dir(self):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         search_paths = [
-            os.path.join(script_dir, "..", "..", "legacy", "bin"),
-            "./legacy/bin",
+            os.path.join(script_dir, "..", "..", "bin"),
             "./bin",
         ]
         for p in search_paths:

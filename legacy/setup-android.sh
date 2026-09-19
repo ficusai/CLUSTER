@@ -62,7 +62,7 @@ cmake .. \
 make -j$(nproc 2>/dev/null || echo 4) rpc-server
 
 echo "[Android] Build complete!"
-cp bin/rpc-server "${ANDROID_DIR}/rpc-server"
+cp ../bin/rpc-server "${ANDROID_DIR}/rpc-server"
 ls -lh "${ANDROID_DIR}/rpc-server"
 
 # 4. Verify the binary works
