@@ -45,6 +45,9 @@ legacy/models/
 .loomignore
 .obsidian-index/
 
+# Dead-code archive (kept locally only, not published)
+DEAD-CODE/
+
 # IDEs
 .idea/
 .vscode/
