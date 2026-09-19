@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """External live dashboard for AI Cluster Auto-Connect.
-Queries the root HTTP API and tails .run.log + logs/*.log in one Rich terminal UI.
+Queries the root HTTP API and tails logs/*.log in one Rich terminal UI.
 """
 import json
 import os
 import sys
 import time
-import traceback
 from datetime import datetime
 from pathlib import Path
 

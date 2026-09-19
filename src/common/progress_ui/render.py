@@ -1,10 +1,7 @@
 """render.py — _render() for ProgressUI."""
 import time
-from datetime import datetime
-from rich.live import Live
 from rich.table import Table
 from rich.panel import Panel
-from rich.layout import Layout
 from rich.text import Text
 from rich import box
 from rich.console import Group
@@ -43,7 +40,6 @@ class RenderMixin:
             for sname, sinfo in sorted(state["services"].items()):
                 icon = STATUS_ICONS.get(sinfo["status"], "\u25cb")
                 color = COLORS_SERVICES.get(sinfo["status"], "white")
-                detail = sinfo.get("detail", "")
                 status_text = Text(f"{icon} {sinfo['status'].upper()}", style=color)
                 label = f"{sname:20s}"
                 svc_table.add_row("", label, status_text)
@@ -153,7 +149,6 @@ class RenderMixin:
             for sname, sinfo in sorted(state["services"].items()):
                 icon = STATUS_ICONS.get(sinfo["status"], "\u25cb")
                 color = COLORS_SERVICES.get(sinfo["status"], "white")
-                detail = sinfo.get("detail", "")
                 status_text = Text(f"{icon} {sinfo['status'].upper()}", style=color)
                 svc_table.add_row("", f"{sname:20s}", status_text)
             svc_panel = Panel(

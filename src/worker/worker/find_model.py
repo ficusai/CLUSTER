@@ -22,9 +22,9 @@ class FindModelMixin:
                 if os.path.isfile(ap):
                     return ap
         search_paths = [
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "legacy", "models"),
-            os.path.expanduser("~/ai-cluster/legacy/models"),
-            "./legacy/models",
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "models"),
+            os.path.expanduser("~/ai-cluster/models"),
+            "./models",
         ]
         for p in search_paths:
             ap = os.path.abspath(p)

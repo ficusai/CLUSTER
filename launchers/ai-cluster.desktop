@@ -20,7 +20,7 @@ Exec=python3 /home/ficus-pro/Documents/CLUSTER/cluster.py --root --gui
 
 [Desktop Action Root]
 Name=Start Root Coordinator
-Exec=/home/ficus-pro/Documents/CLUSTER/ai-cluster-desktop-root.sh
+Exec=/home/ficus-pro/Documents/CLUSTER/scripts/ai-cluster-desktop-root.sh
 
 [Desktop Action Worker]
 Name=Start Worker Node
@@ -28,8 +28,8 @@ Exec=python3 /home/ficus-pro/Documents/CLUSTER/cluster.py --worker --gui
 
 [Desktop Action Stop]
 Name=Stop All Cluster Services
-Exec=/home/ficus-pro/Documents/CLUSTER/ai-cluster-stop.sh
+Exec=/home/ficus-pro/Documents/CLUSTER/scripts/ai-cluster-stop.sh
 
 [Desktop Action Logs]
 Name=View Cluster Logs
-Exec=/home/ficus-pro/Documents/CLUSTER/ai-cluster-logs.sh
+Exec=/home/ficus-pro/Documents/CLUSTER/scripts/ai-cluster-logs.sh

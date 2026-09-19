@@ -34,16 +34,23 @@ android_ssh_key*
 *.pfx
 
 # Binaries and Models
-legacy/bin/llama-server
-legacy/bin/rpc-server
-legacy/bin/*.so*
-legacy/models/
+bin/*
+!bin/.gitkeep
+models/*
+!models/.gitkeep
 *.gguf
+
+# Runtime state (PID/lock files written by launcher scripts)
+runtime/*
+!runtime/.gitkeep
 
 # Tooling and Caches
 .codescope.json
 .loomignore
 .obsidian-index/
+
+# Dead-code archive (kept locally only, not published)
+DEAD-CODE/
 
 # IDEs
 .idea/

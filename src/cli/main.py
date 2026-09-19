@@ -7,7 +7,6 @@ from common.loghub import LogHub
 from .load_config import VERSION
 from .print_banner import print_banner
 from .choose_mode_interactive import choose_mode_interactive
-from ._make_extra_args import _make_extra_args
 from ._launch_gui import _launch_gui
 from ._launch_terminal import _launch_terminal
 from .check_dependencies import check_dependencies

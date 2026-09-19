@@ -38,9 +38,9 @@ fi
 # Locate rpc-server binary
 RPC_BIN=""
 for candidate in \
-    "${SCRIPT_DIR}/bin/rpc-server" \
+    "${SCRIPT_DIR}/../bin/rpc-server" \
     "${SCRIPT_DIR}/rpc-server" \
-    "${HOME}/ai-cluster/rpc-server"; do
+    "${HOME}/ai-cluster/bin/rpc-server"; do
     if [ -f "${candidate}" ]; then
         RPC_BIN="${candidate}"
         chmod +x "${RPC_BIN}" 2>/dev/null || true
@@ -50,7 +50,7 @@ done
 
 if [ -z "${RPC_BIN}" ]; then
     echo "[WORKER] ERROR: rpc-server binary not found."
-    echo "  Looked in: ./bin/rpc-server, ./rpc-server, ~/ai-cluster/rpc-server"
+    echo "  Looked in: ../bin/rpc-server, ./rpc-server, ~/ai-cluster/bin/rpc-server"
     exit 1
 fi
 

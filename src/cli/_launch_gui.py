@@ -1,13 +1,10 @@
 """_launch_gui.py — Launch GUI mode (PySide6)."""
-import sys
 import time
-import socket
 import threading
 from common.loghub import LogHub
 from common.discovery import discover_roots_on_network, UDPBroadcastDiscovery
 from common.protocol import parse_msg, make_msg
 from .load_config import VERSION
-from ._make_extra_args import _make_extra_args
 from .run_as_root import run_as_root
 from .run_as_worker import run_as_worker
 
@@ -17,10 +14,6 @@ from .run_as_worker import run_as_worker
 def _launch_gui(mode, args, config=None):
     # Import the GUI runner function from our gui module
     from gui.app import run_gui
-    
-    # For root mode, prepare combined arguments; for worker, use empty dict
-    # Worker gets root IP via discovery inside cluster_fn below
-    kwargs = _make_extra_args(args, config=config) if mode == "root" else {}
 
     # Define a nested function that the GUI will call when user clicks "Start"
     # This function encapsulates the logic for starting root or worker

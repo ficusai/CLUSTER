@@ -1,5 +1,4 @@
 """handle_worker.py — _handle_worker(sock, ip) for ClusterRoot."""
-import sys
 from common.loghub import LogHub
 from common.protocol import ControlProtocol, MSG_REGISTER
 from ..detection import get_local_ip

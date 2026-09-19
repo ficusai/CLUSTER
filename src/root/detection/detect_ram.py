@@ -1,5 +1,4 @@
 """detect_ram.py — detect_ram() function."""
-import os
 from common.loghub import LogHub
 
 HAVE_PSUTIL = False

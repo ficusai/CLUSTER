@@ -3,11 +3,11 @@ import socket
 import threading
 import time
 from common.loghub import LogHub
-from common.protocol import UDP_DISCOVERY_PORT, MDNS_ROOT_SERVICE_TYPE, CTRL_PORT_DEFAULT, make_msg, parse_msg
+from common.protocol import UDP_DISCOVERY_PORT, MDNS_ROOT_SERVICE_TYPE, CTRL_PORT_DEFAULT, parse_msg
 
 HAVE_ZEROCONF = False
 try:
-    from zeroconf import ServiceInfo, ServiceBrowser, Zeroconf
+    from zeroconf import ServiceBrowser, Zeroconf
     HAVE_ZEROCONF = True
 except ImportError:
     pass

@@ -6,7 +6,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/cluster-config.env"
 
-SSH_KEY="${SCRIPT_DIR}/android_ssh_key"
+SSH_KEY="$(cd "${SCRIPT_DIR}/.." && pwd)/security/keys/android_ssh_key"
 WORKER_SCRIPT="~/ai-cluster/start-worker.sh"
 
 ANDROID_USER="${ANDROID_USER:-u0_a377}"

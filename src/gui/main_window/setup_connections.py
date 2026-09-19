@@ -1,5 +1,4 @@
 """setup_connections.py — _setup_connections() for MainWindow."""
-from PySide6.QtWidgets import QApplication
 from common.loghub import LogHub
 
 

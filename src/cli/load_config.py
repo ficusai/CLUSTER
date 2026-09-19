@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 """load_config.py — Load configuration from config.yaml."""
 # Import standard Python libraries that provide common functionality
-import argparse  # For parsing command-line arguments (like --root, --worker, --gui)
 import os        # For file and directory operations, environment variables
-import secrets   # For generating secure random tokens (used for API authentication)
 import sys       # For system-level operations like exiting the program, modifying argv
-import time      # For timing operations (measuring how long network scans take)
-import socket    # For network operations (IP addresses, hostnames, connections)
 
 # Add the "src" folder (inside this project) to Python's search path
 # This lets us import modules from src/ like "from common.loghub import LogHub"

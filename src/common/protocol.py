@@ -1,13 +1,9 @@
 import json
 import socket
-import struct
 import time
 
 from .loghub import LogHub
 from functools import wraps
-
-MAGIC = b"CLUSTER\x00\x01"
-PROTO_VERSION = 1
 
 MSG_REGISTER = "register"
 MSG_REGISTER_ACK = "register_ack"
@@ -15,8 +11,6 @@ MSG_TASK = "task"
 MSG_TASK_RESULT = "result"
 MSG_PING = "ping"
 MSG_PONG = "pong"
-MSG_DEPLOY = "deploy"
-MSG_DEPLOY_ACK = "deploy_ack"
 MSG_DISCONNECT = "disconnect"
 
 RPC_PORT_DEFAULT = 50052

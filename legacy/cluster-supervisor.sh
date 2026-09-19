@@ -16,7 +16,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/cluster-config.env"
 
-BIN_DIR="${SCRIPT_DIR}/bin"
+BIN_DIR="${SCRIPT_DIR}/../bin"
 LOG_FILE="${SCRIPT_DIR}/cluster.log"
 
 LD_LIBRARY_PATH="${BIN_DIR}:${LD_LIBRARY_PATH:-}"
@@ -51,7 +51,7 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 # Resolve model path
-MODEL_PATH="${MODEL_PATH:-./models/qwen2.5-1.5b-instruct-q4_k_m.gguf}"
+MODEL_PATH="${MODEL_PATH:-../models/qwen2.5-1.5b-instruct-q4_k_m.gguf}"
 [[ "${MODEL_PATH}" != /* ]] && MODEL_PATH="${SCRIPT_DIR}/${MODEL_PATH}"
 
 # Worker definitions: "LABEL|IP:PORT"

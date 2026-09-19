@@ -8,8 +8,7 @@ class GetBundledGgufModelsMixin:
     def get_bundled_gguf_models(self):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         search_paths = [
-            os.path.join(script_dir, "..", "..", "legacy", "models"),
-            "./legacy/models",
+            os.path.join(script_dir, "..", "..", "models"),
             "./models",
         ]
         models = []

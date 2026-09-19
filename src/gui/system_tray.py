@@ -1,10 +1,8 @@
-import os
-import threading
-from PySide6.QtCore import Qt, QTimer, Signal, QObject
-from PySide6.QtGui import QIcon, QAction, QPixmap, QPainter, QColor, QFont, QCursor
-from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
+"""System tray icon for the cluster GUI."""
+from PySide6.QtCore import Qt, Signal, QObject
+from PySide6.QtGui import QIcon, QAction, QPixmap, QPainter, QColor, QFont
+from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 
-from .resources import APP_ICON_SVG, STATUS_ICONS, ICON_COLORS
 from common.loghub import LogHub
 
 COLOR_BG = QColor("#2C5F8A")

@@ -1,6 +1,6 @@
 """handle_worker_message.py — _handle_worker_message(msg, worker_id) for ClusterRoot."""
 from common.loghub import LogHub
-from common.protocol import MSG_PING, MSG_PONG, MSG_TASK_RESULT, MSG_DISCONNECT, MSG_REGISTER_ACK
+from common.protocol import MSG_PING, MSG_PONG, MSG_TASK_RESULT, MSG_DISCONNECT
 
 
 class HandleWorkerMessageMixin:

@@ -29,7 +29,7 @@ build:
 	@bash build/build.sh
 
 install:
-	@bash install.sh
+	@bash scripts/install.sh
 
 uninstall:
 	@echo "=== Uninstalling AI Cluster ==="
@@ -41,10 +41,10 @@ uninstall:
 	@echo "Uninstalled."
 
 install-local:
-	@PREFIX="$(PREFIX)" bash install-local.sh
+	@PREFIX="$(PREFIX)" bash scripts/install-local.sh
 
 uninstall-local:
-	@PREFIX="$(PREFIX)" bash install-local.sh --uninstall
+	@PREFIX="$(PREFIX)" bash scripts/install-local.sh --uninstall
 
 run:
 	python3 cluster.py
